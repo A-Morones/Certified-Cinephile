@@ -1,6 +1,23 @@
+body {
+background-color: rgb(202, 29, 29);
+background:
+  linear-gradient(rgb(202, 29, 29), rgb(142, 21, 21));
+height:100vh;
+}
 h1 {
+  margin-top:100px;
   text-align: center;
-  color: magenta;
-  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
-    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+  color: rgb(255, 255, 255);
+  font-family: "Shrikhand", serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size:10vh;
+  margin-bottom:0px;
+}
+
+p {
+  text-align: center;
+  color:rgb(255, 255, 255);
+  font-size:4vh;
+  margin-top:0px;
 }
