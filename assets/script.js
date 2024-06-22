@@ -1,4 +1,10 @@
 const addPlayerBtn = document.querySelector("#add-player-btn");
+const startBtn = document.getElementById("start-game-btn");
+const landingPage = document.getElementById("landing")
+const gamePage = document.getElementById("game-page")
+const resultsPage = document.getElementById("results-page")
+const guessBtn = document.getElementById("guess")
+const playAgain = document.getElementById("play-again")
 let players = JSON.parse(localStorage.getItem("playersData"));
 if (players === null) {
   players = [];
@@ -36,4 +42,30 @@ const logStoredPlayers = function () {
     console.log("No players data found in local storage.");
   }
 };
+
+const gameStart = function() {
+  landingPage.setAttribute("class","page out");
+  setInterval(gamePage.setAttribute("class", "page load"), 500);
+  setInterval(gamePage.setAttribute("class", "page in"),500);
+};
+
+const gameResults = function() {
+  gamePage.setAttribute("class","page out");
+  setInterval(resultsPage.setAttribute("class", "page load"), 500);
+  resultsPage.setAttribute("class", "page in");
+};
+
+const restartGame = function() {
+  resultsPage.setAttribute("class","page out");
+  setInterval(landingPage.setAttribute("class", "page load"), 500);
+  landingPage.setAttribute("class", "page in");
+};
+
+
 addPlayerBtn.addEventListener("click", trackPlayersData);
+
+startBtn.addEventListener("click", gameStart);
+
+guessBtn.addEventListener("click", gameResults);
+
+playAgain.addEventListener("click", restartGame);
