@@ -17,46 +17,46 @@ body.mode2 {
   overflow:hidden;
 }
 h1 {
+  margin:0;
   opacity: 0;
-  margin-top: 30px;
   text-align: center;
-  color: rgb(255, 255, 255);
-  font-family: "Shrikhand", serif;
+  font-family: "Oswald", serif;
   font-weight: 400;
   font-style: normal;
   font-size: 6vw;
-  text-shadow: rgba(149, 1, 1, 0.893) 5px 5px;
   margin-bottom: 0px;
-  line-height: 5vw;
+  /* line-height: 5vw; */
   animation: logoanim 1s forwards 1s;
-  transform:rotate(-5deg);
-
-}
-
-h1 {
-  opacity: 0;
-  margin-top: 30px;
-  text-align: center;
-  color: rgb(255, 255, 255);
-  font-family: "Shrikhand", serif;
-  font-weight: 400;
-  font-style: normal;
-  font-size: 6vw;
-  text-shadow: rgba(149, 1, 1, 0.893) 5px 5px;
-  margin-bottom: 0px;
-  line-height: 5vw;
-  animation: logoanim 1s forwards 1s;
-  transform:rotate(-5deg);
 
 }
 
 h2 {
   color:white;
+  margin-top:20px;
+  font-size:15px;
+}
+
+.logo-container {
+  display:flex;
+  flex-flow:column;
+  align-items: center;
+}
+
+.logo-top {
+  text-align:center;
+  padding:8px;
+}
+
+.logo-bottom {
+  opacity:0;
+  text-align:center;
+  width:29vw;
+  height:5.5vw;
+  animation: logoanim 1s forwards 1s;
 }
 
 .logoA {
     opacity: 0;
-    margin-top: 30px;
     text-align: center;
     color: rgb(255, 255, 255);
     font-family: "Shrikhand", serif;
@@ -64,10 +64,27 @@ h2 {
     font-style: normal;
     font-size: 6vw;
     text-shadow: rgba(149, 1, 1, 0.893) 5px 5px;
+    margin-top:4vw;
     margin-bottom: 0px;
-    line-height: 5vw;
+    line-height: 2vw;
     animation: logoanim 1s forwards 1s;
-    transform:rotate(5deg);
+
+}
+
+.logoB {
+  opacity: 0;
+  margin-top: 10px;
+  text-align: center;
+  color: white;
+  font-family: "Oswald", serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 5.5vw;
+  letter-spacing:0.5vw;
+  margin-bottom: 0px;
+  line-height: 5vw;
+  animation: logoanim 1s forwards 1s;
+
 }
 
 p {
@@ -78,8 +95,6 @@ p {
   font-family:"Inter", sans-serif;
 }
 
-
-
 .page {
   width:100%;
   height:100vh;
@@ -89,49 +104,52 @@ p {
   visibility:none;
 }
 
-#game-page {
+/* #game-page {
   background-color:white;
-}
+} */
 
 
 #movie {
+  margin:0;
   width:49%;
   float:left;
-  color:red;
-  height:30vh;
+  color:rgb(255, 255, 255);
+  height:100vh;
   border:solid;
   border-radius:20px;
  }
  
  #input {
+  margin:0;
  width:49%;
   float:left;
-  color:red;
-  height:30vh;
+  color:rgb(255, 255, 255);
+  height:100vh;
   border:solid;
   border-radius:20px;
  }
  
 
 #movie p {
- color:red;
+ color:rgb(255, 255, 255);
 }
 
 #input p {
 width:45%;
  float:left;
- color:red;
+ color:rgb(255, 255, 255);
 }
 
 .page.in {
   top:0;
-
+  opacity:1;
 }
 
 .page.out {
   position:absolute;
   visibility:hidden;
   top:-100%;
+  opacity:0;
 
 }
 
