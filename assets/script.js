@@ -1,4 +1,3 @@
-
 const addPlayerBtn = document.querySelector("#add-player-btn");
 const landingPage = document.getElementById("landing")
 const startBtn = document.getElementById("start-game-btn");
@@ -119,10 +118,7 @@ const restartGame = function() {
 
 // Event listeners below. The names should be helpful in discerning which is which.
 addPlayerBtn.addEventListener("click", trackPlayersData);
-<<<<<<< HEAD
->>>>>>> 6d1384f2daabba6d55738e94bc20c2886c78d57c
-=======
 startBtn.addEventListener("click", gameStart);
 guessBtn.addEventListener("click", gameResults);
 playAgain.addEventListener("click", restartGame);
->>>>>>> main
+
