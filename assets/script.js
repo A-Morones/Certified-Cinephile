@@ -18,6 +18,9 @@ if (players === null) {
   players = [];
 }
 
+const API_KEY = '3306c7ffcda8121e53d4fb1e95e8750c';
+const TMDB_URL = `https://api.themoviedb.org/3/movie/11?api_key=${API_KEY}&language=en-US&page=1`;
+
 const collectPlayers = function () {
   //   const players = [];
   let keepEntering = true;
@@ -51,9 +54,30 @@ const logStoredPlayers = function () {
   }
 };
 
+const displayMovie = function(movie) {
+  document.getElementById('movie-title').textContent = movie.title;
+  document.getElementById('movie-poster').innerHTML = `<img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title} Poster">`;
+  document.getElementById('movie-summary').textContent = `Summary: ${movie.overview}`;
+};
+
 // This function begins when Start Game button on Landing Page is pressed.
 const gameStart = function() {
     roundDisplay.innerHTML = `Round:${roundCount}/10`;
+
+    // Fetch a random now-playing movie from TMDB API
+    const options = {
+      method: 'GET',
+      headers: {
+        accept: 'application/json',
+        Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIzMzA2YzdmZmNkYTgxMjFlNTNkNGZiMWU5NWU4NzUwYyIsIm5iZiI6MTcxOTI3MzM0NS41ODQ4NzksInN1YiI6IjY2NzhlOWQxMjlmMjg4YjIzZGNlYjFmZiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.NMjKDHRmOC_UqZoOMZCSaXOYdKwZmvsvKPuUo_XICn0'
+      }
+    };
+    
+    fetch('https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&year=2019', options)
+      .then(response => response.json())
+      .then(response => console.log(response))
+      .catch(err => console.error(err));
+
 
     // This is the screen transition script.
     // It applies CSS classes that effectively slide the current containers off screen to be replaced by the next screen.
@@ -61,6 +85,8 @@ const gameStart = function() {
     setInterval(gamePage.setAttribute("class", "page load"), 500);
     setInterval(gamePage.setAttribute("class", "page in"),500);
     };
+
+
 
 // TODO: I started to put together a function to call when checking score player enters versus their guessed score. It is incomplete. This would probably be a good place to have API fetch request to pull Rotten Tomatoes scores from OMDB.
 const guessCheck = function() {
@@ -95,3 +121,4 @@ addPlayerBtn.addEventListener("click", trackPlayersData);
 startBtn.addEventListener("click", gameStart);
 guessBtn.addEventListener("click", gameResults);
 playAgain.addEventListener("click", restartGame);
+
