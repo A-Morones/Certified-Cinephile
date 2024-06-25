@@ -54,11 +54,7 @@ const logStoredPlayers = function () {
   }
 };
 
-const displayMovie = function(movie) {
-  document.getElementById('movie-title').textContent = movie.title;
-  document.getElementById('movie-poster').innerHTML = `<img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title} Poster">`;
-  document.getElementById('movie-summary').textContent = `Summary: ${movie.overview}`;
-};
+
 
 // This function begins when Start Game button on Landing Page is pressed.
 const gameStart = function() {
@@ -73,9 +69,25 @@ const gameStart = function() {
       }
     };
     
-    fetch('https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&year=2019', options)
+    fetch('https://api.themoviedb.org/3/movie/now_playing?&page=2&region=US&api_key=5532930052be6e0e9545c5d93651df5f', options)
       .then(response => response.json())
-      .then(response => console.log(response))
+      .then(function (movie) {
+        console.log(movie);
+        rMI = Math.floor(Math.random()*10);
+        movieTitle = document.createElement("div");
+        movieTitle.innerHTML = `${movie.results[rMI].title}`;
+        document.getElementById('movie-title').appendChild(movieTitle);
+
+
+        // document.getElementById('movie-title').textContent = movie.title;
+        
+        moviePoster = document.createElement("div");
+        moviePoster.innerHTML = `<img src="https://image.tmdb.org/t/p/w500${movie.results[rMI].poster_path}" alt="${movie.results[rMI].title} Poster" sizes="40em">`;
+        document.getElementById('movie-poster').appendChild(moviePoster);
+        
+        // .innerHTML = `<img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title} Poster">`;
+        // document.getElementById('movie-summary').textContent = `Summary: ${movie.overview}`;
+      })
       .catch(err => console.error(err));
 
 
@@ -99,6 +111,44 @@ const guessCheck = function() {
 const gameResults = function() {
     if (roundCount !== 10) {
     roundCount++;
+
+    const options = {
+      method: 'GET',
+      headers: {
+        accept: 'application/json',
+        Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIzMzA2YzdmZmNkYTgxMjFlNTNkNGZiMWU5NWU4NzUwYyIsIm5iZiI6MTcxOTI3MzM0NS41ODQ4NzksInN1YiI6IjY2NzhlOWQxMjlmMjg4YjIzZGNlYjFmZiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.NMjKDHRmOC_UqZoOMZCSaXOYdKwZmvsvKPuUo_XICn0'
+      }
+    };
+
+    fetch('https://api.themoviedb.org/3/movie/now_playing?&page=2&region=US&api_key=5532930052be6e0e9545c5d93651df5f', options)
+    .then(response => response.json())
+    .then(function (movie) {
+      console.log(movie);
+      rMI = Math.floor(Math.random()*20);
+      movieTitle = document.createElement("div");
+      movieTitle.setAttribute("id", `movieno${roundCount}`);
+      movieTitle.innerHTML = `${movie.results[rMI].title}`;
+      if (document.getElementById('movie-title').childElementCount!==0); {
+      document.getElementById('movie-title').removeChild(`movieno${roundCount}`);
+      }
+      document.getElementById('movie-title').appendChild(movieTitle);
+
+
+      // document.getElementById('movie-title').textContent = movie.title;
+      
+      moviePoster = document.createElement("div");
+      moviePoster.setAttribute("id", `moviepno${roundCount}`);
+      moviePoster.innerHTML = `<img src="https://image.tmdb.org/t/p/w500${movie.results[rMI].poster_path}" alt="${movie.results[rMI].title} Poster" sizes="40em">`;
+      if (document.getElementById('movie-poster').childElementCount!==0); {
+        document.getElementById('movie-poster').removeChild(`moviepno${roundCount}`);
+        }
+      document.getElementById('movie-poster').appendChild(moviePoster);
+      
+      // .innerHTML = `<img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title} Poster">`;
+      // document.getElementById('movie-summary').textContent = `Summary: ${movie.overview}`;
+    })
+    .catch(err => console.error(err));
+    
     roundDisplay.innerHTML = `Round:${roundCount}/10`;
     console.log(roundCount);
     } else if (roundCount === 10) {
