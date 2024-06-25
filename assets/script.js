@@ -1,46 +1,26 @@
-<<<<<<< HEAD
-//Finds trailer based on search//
-//Will change once TMDB API's in Place//
-$(document).ready(function() {
-    const API_KEY = 'YOUR_YOUTUBE_API_KEY';
-    const SEARCH_URL = 'https://www.googleapis.com/youtube/v3/search';
 
-    $('#search-form').submit(function(event) {
-        event.preventDefault();
-        const movieTitle = $('#movie-title').val();
-
-        $.ajax({
-            url: SEARCH_URL,
-            method: 'GET',
-            data: {
-                part: 'snippet',
-                q: `${movieTitle} trailer`,
-                type: 'video',
-                key: API_KEY,
-                maxResults: 1
-            },
-            success: function(response) {
-                if (response.items && response.items.length > 0) {
-                    const videoId = response.items[0].id.videoId;
-                    const trailerUrl = `https://www.youtube.com/embed/${videoId}`;
-                    $('#trailer-container').html(`<iframe width="560" height="315" src="${trailerUrl}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`);
-                } else {
-                    $('#trailer-container').html('<p>No trailer found</p>');
-                }
-            },
-            error: function(error) {
-                console.error('Error:', error);
-                $('#trailer-container').html('<p>An error occurred while fetching the trailer</p>');
-            }
-        });
-    });
-});
-=======
 const addPlayerBtn = document.querySelector("#add-player-btn");
+const landingPage = document.getElementById("landing")
+const startBtn = document.getElementById("start-game-btn");
+
+const gamePage = document.getElementById("game-page");
+const guessBtn = document.getElementById("guess");
+
+const resultsPage = document.getElementById("results-page");
+const roundDisplay = document.getElementById("round-display");
+
+const playAgain = document.getElementById("play-again");
+
+// Initialize game state as Round 1.
+let roundCount = 1;
+
 let players = JSON.parse(localStorage.getItem("playersData"));
 if (players === null) {
   players = [];
 }
+
+const API_KEY = '3306c7ffcda8121e53d4fb1e95e8750c';
+const TMDB_URL = `https://api.themoviedb.org/3/movie/11?api_key=${API_KEY}&language=en-US&page=1`;
 
 const collectPlayers = function () {
   //   const players = [];
@@ -74,5 +54,75 @@ const logStoredPlayers = function () {
     console.log("No players data found in local storage.");
   }
 };
+
+const displayMovie = function(movie) {
+  document.getElementById('movie-title').textContent = movie.title;
+  document.getElementById('movie-poster').innerHTML = `<img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title} Poster">`;
+  document.getElementById('movie-summary').textContent = `Summary: ${movie.overview}`;
+};
+
+// This function begins when Start Game button on Landing Page is pressed.
+const gameStart = function() {
+    roundDisplay.innerHTML = `Round:${roundCount}/10`;
+
+    // Fetch a random now-playing movie from TMDB API
+    const options = {
+      method: 'GET',
+      headers: {
+        accept: 'application/json',
+        Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIzMzA2YzdmZmNkYTgxMjFlNTNkNGZiMWU5NWU4NzUwYyIsIm5iZiI6MTcxOTI3MzM0NS41ODQ4NzksInN1YiI6IjY2NzhlOWQxMjlmMjg4YjIzZGNlYjFmZiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.NMjKDHRmOC_UqZoOMZCSaXOYdKwZmvsvKPuUo_XICn0'
+      }
+    };
+    
+    fetch('https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&year=2019', options)
+      .then(response => response.json())
+      .then(response => console.log(response))
+      .catch(err => console.error(err));
+
+
+    // This is the screen transition script.
+    // It applies CSS classes that effectively slide the current containers off screen to be replaced by the next screen.
+    landingPage.setAttribute("class","page out");
+    setInterval(gamePage.setAttribute("class", "page load"), 500);
+    setInterval(gamePage.setAttribute("class", "page in"),500);
+    };
+
+
+
+// TODO: I started to put together a function to call when checking score player enters versus their guessed score. It is incomplete. This would probably be a good place to have API fetch request to pull Rotten Tomatoes scores from OMDB.
+const guessCheck = function() {
+    if (guessedScore === actualScore) {}
+    };
+
+// This function is called when the Submit button on the Gameplay screen is pressed. It will increment the current 'Round' up to 10. After Round 10 the final round it will transition to the Game Results screen, which would be the final screen. WIP.
+
+// TODO: I suggest this function also being the place to add our API fetch requests to populate the Movie Title, Poster, and Plot Summary from TMDB.
+const gameResults = function() {
+    if (roundCount !== 10) {
+    roundCount++;
+    roundDisplay.innerHTML = `Round:${roundCount}/10`;
+    console.log(roundCount);
+    } else if (roundCount === 10) {
+    gamePage.setAttribute("class","page out");
+    setInterval(resultsPage.setAttribute("class", "page load"), 500);
+    resultsPage.setAttribute("class", "page in");
+    }
+    };
+
+const restartGame = function() {
+    roundCount = 1;
+    resultsPage.setAttribute("class","page out");
+    setInterval(landingPage.setAttribute("class", "page load"), 500);
+    landingPage.setAttribute("class", "page in");
+    };
+
+
+// Event listeners below. The names should be helpful in discerning which is which.
 addPlayerBtn.addEventListener("click", trackPlayersData);
+<<<<<<< HEAD
 >>>>>>> 6d1384f2daabba6d55738e94bc20c2886c78d57c
+=======
+startBtn.addEventListener("click", gameStart);
+guessBtn.addEventListener("click", gameResults);
+playAgain.addEventListener("click", restartGame);
+>>>>>>> main

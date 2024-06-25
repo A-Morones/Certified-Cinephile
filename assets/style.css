@@ -1,19 +1,90 @@
 body {
+  margin:0;
+  padding:0;
   background-color: rgb(202, 29, 29);
-  background: linear-gradient(rgb(202, 29, 29), rgb(142, 21, 21));
+  background: 
+  radial-gradient(rgb(187, 10, 10) 0%, rgb(178, 12, 12) 90%, rgb(123, 11, 11) 100%),
+  linear-gradient(rgb(202, 29, 29) 0%,rgba(166, 25, 25, 0.523) 90%, rgb(83, 7, 7) 100%);
   height: 100vh;
+  font-family:"Inter", sans-serif;
+  overflow:hidden;
+}
+
+body.mode2 {
+  background-color: rgb(255, 240, 240);
+  height: 100vh;
+  font-family:"Inter", sans-serif;
+  overflow:hidden;
 }
 h1 {
+  margin:0;
   opacity: 0;
-  margin-top: 100px;
   text-align: center;
-  color: rgb(255, 255, 255);
-  font-family: "Shrikhand", serif;
+  font-family: "Oswald", serif;
   font-weight: 400;
   font-style: normal;
-  font-size: 10vh;
+  font-size: 6vw;
   margin-bottom: 0px;
+  /* line-height: 5vw; */
   animation: logoanim 1s forwards 1s;
+
+}
+
+h2 {
+  color:white;
+  margin-top:20px;
+  font-size:15px;
+}
+
+.logo-container {
+  display:flex;
+  flex-flow:column;
+  align-items: center;
+}
+
+.logo-top {
+  text-align:center;
+  padding:8px;
+}
+
+.logo-bottom {
+  opacity:0;
+  text-align:center;
+  width:29vw;
+  height:5.5vw;
+  animation: logoanim 1s forwards 1s;
+}
+
+.logoA {
+    opacity: 0;
+    text-align: center;
+    color: rgb(255, 255, 255);
+    font-family: "Shrikhand", serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 6vw;
+    text-shadow: rgba(149, 1, 1, 0.893) 5px 5px;
+    margin-top:4vw;
+    margin-bottom: 0px;
+    line-height: 2vw;
+    animation: logoanim 1s forwards 1s;
+
+}
+
+.logoB {
+  opacity: 0;
+  margin-top: 10px;
+  text-align: center;
+  color: white;
+  font-family: "Oswald", serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 5.5vw;
+  letter-spacing:0.5vw;
+  margin-bottom: 0px;
+  line-height: 5vw;
+  animation: logoanim 1s forwards 1s;
+
 }
 
 p {
@@ -21,7 +92,79 @@ p {
   color: rgb(255, 255, 255);
   font-size: 4vh;
   margin-top: 0px;
+  font-family:"Inter", sans-serif;
 }
+
+.page {
+  width:100%;
+  height:100vh;
+  position:absolute;
+  transition: all 1s ease;
+  top:0;
+  visibility:none;
+}
+
+/* #game-page {
+  background-color:white;
+} */
+
+
+#movie {
+  margin:0;
+  width:49%;
+  float:left;
+  color:rgb(255, 255, 255);
+  height:100vh;
+  border:solid;
+  border-radius:20px;
+ }
+ 
+ #input {
+  margin:0;
+ width:49%;
+  float:left;
+  color:rgb(255, 255, 255);
+  height:100vh;
+  border:solid;
+  border-radius:20px;
+ }
+ 
+
+#movie p {
+ color:rgb(255, 255, 255);
+}
+
+#input p {
+width:45%;
+ float:left;
+ color:rgb(255, 255, 255);
+}
+
+.page.in {
+  top:0;
+  opacity:1;
+}
+
+.page.out {
+  position:absolute;
+  visibility:hidden;
+  top:-100%;
+  opacity:0;
+
+}
+
+.page.load {
+  position:absolute;
+  visibility:hidden;
+  top:100%;
+
+}
+
+.page.preload {
+  top:100%;
+  display:none;
+}
+
 
 @keyframes logoanim {
   0% {
@@ -33,7 +176,6 @@ p {
 }
 
 .btn {
-  position: relative;
   text-align: center;
   left: 900px;
   background-color: black;
