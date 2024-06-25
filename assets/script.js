@@ -74,9 +74,10 @@ const gameStart = function() {
     };
     
     fetch('https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&year=2019', options)
-      .then(response => response.json())
-      .then(response => console.log(response))
-      .catch(err => console.error(err));
+    .then(response => response.json())
+    .then(response => console.log(response))
+    .catch(err => console.error(err));
+      
 
 
     // This is the screen transition script.
