@@ -165,6 +165,14 @@ const restartGame = function() {
     landingPage.setAttribute("class", "page in");
     };
 
+const checkScore = function(RTscore) {
+  let guessedScore;
+  let accuracy = 1 - (Math.abs(`${RTscore}` - guessedScore))/100
+  let weightedAccuracy = Math.pow(accuracy, 2) 
+  let maxPoints = 50;
+  let earnedPoints = maxPoints * weightedAccuracy;
+  return earnedPoints;
+}
 
 // Event listeners below. The names should be helpful in discerning which is which.
 addPlayerBtn.addEventListener("click", trackPlayersData);
