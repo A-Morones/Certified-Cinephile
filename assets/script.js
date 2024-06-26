@@ -4,6 +4,7 @@ const startBtn = document.getElementById("start-game-btn");
 
 const gamePage = document.getElementById("game-page");
 const guessBtn = document.getElementById("guess");
+const nextRoundBtn = document.getElementById("next-round");
 
 const resultsPage = document.getElementById("results-page");
 const roundDisplay = document.getElementById("round-display");
@@ -89,8 +90,8 @@ const gameStart = function () {
 
         moviePoster = document.createElement("div");
 
-        moviePoster.innerHTML = `<img src="https://image.tmdb.org/t/p/w500${movie.results[rMI].poster_path}" alt="${movie.results
-        [rMI].title} Poster" width="350em">`;
+        moviePoster.innerHTML = `<img id="poster-img" src="https://image.tmdb.org/t/p/w500${movie.results[rMI].poster_path}" alt="${movie.results
+        [rMI].title} Poster" width="300em">`;
         moviePoster.setAttribute("id", "poppedMoviePoster");
 
         if (document.getElementById("movie-poster").childElementCount !== 0)
@@ -98,6 +99,7 @@ const gameStart = function () {
           document.getElementById("movie-poster").removeChild(document.getElementById("poppedMoviePoster"));
         }
         document.getElementById("movie-poster").appendChild(moviePoster);
+        console.log(document.getElementById("movie-poster").getBoundingClientRect());
 
       // .innerHTML = `<img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title} Poster">`;
       // document.getElementById('movie-summary').textContent = `Summary: ${movie.overview}`;
@@ -120,7 +122,7 @@ const guessCheck = function () {
 // This function is called when the Submit button on the Gameplay screen is pressed. It will increment the current 'Round' up to 10. After Round 10 the final round it will transition to the Game Results screen, which would be the final screen. WIP.
 
 // TODO: I suggest this function also being the place to add our API fetch requests to populate the Movie Title, Poster, and Plot Summary from TMDB.
-const gameResults = function () {
+const nextRoundFunction = function () {
   if (roundCount !== 10) {
     roundCount++;
     let rPg = Math.floor(Math.random()*300);
@@ -157,14 +159,16 @@ const gameResults = function () {
         moviePoster = document.createElement("div");
 
         moviePoster.innerHTML = `<img src="https://image.tmdb.org/t/p/w500${movie.results[rMI].poster_path}" alt="${movie.results
-        [rMI].title} Poster" width="350em">`;
+        [rMI].title} Poster" width="300em">`;
         moviePoster.setAttribute("id", "poppedMoviePoster");
+        
 
         if (document.getElementById("movie-poster").childElementCount !== 0)
         {
           document.getElementById("movie-poster").removeChild(document.getElementById("poppedMoviePoster"));
         }
         document.getElementById("movie-poster").appendChild(moviePoster);
+        console.log(document.getElementById("movie-poster").getBoundingClientRect());
 
         // .innerHTML = `<img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title} Poster">`;
         // document.getElementById('movie-summary').textContent = `Summary: ${movie.overview}`;
@@ -201,8 +205,76 @@ const checkScore = function(RTscore) {
   return earnedPoints;
 }
 
+
+// const timerPoster = function() {
+//   do
+//   const options = {
+//     method: "GET",
+//     headers: {
+//       accept: "application/json",
+//       Authorization:
+//         "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIzMzA2YzdmZmNkYTgxMjFlNTNkNGZiMWU5NWU4NzUwYyIsIm5iZiI6MTcxOTI3MzM0NS41ODQ4NzksInN1YiI6IjY2NzhlOWQxMjlmMjg4YjIzZGNlYjFmZiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.NMjKDHRmOC_UqZoOMZCSaXOYdKwZmvsvKPuUo_XICn0",
+//     },
+//   };
+
+//   fetch(
+//     `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=true&language=en-US&page=${rPg}&sort_by=popularity.desc&with_original_language=en&&release_date.lte=${dayjs().format('MM-DD-YYYY')}&api_key=${API_KEY}`,
+//     options
+//   )
+//   while posterCarousel === true;
+// }
+
+
+
 // Event listeners below. The names should be helpful in discerning which is which.
 addPlayerBtn.addEventListener("click", trackPlayersData);
 startBtn.addEventListener("click", gameStart);
-guessBtn.addEventListener("click", gameResults);
+// guessBtn.addEventListener("click", gameResults);
+nextRoundBtn.addEventListener("click", nextRoundFunction);
 playAgain.addEventListener("click", restartGame);
+
+
+
+// Bulma Modal Event Listener: https://bulma.io/documentation/components/modal/
+document.addEventListener('DOMContentLoaded', () => {
+  // Functions to open and close a modal
+  function openModal($el) {
+    $el.classList.add('is-active');
+  }
+
+  function closeModal($el) {
+    $el.classList.remove('is-active');
+  }
+
+  function closeAllModals() {
+    (document.querySelectorAll('.modal') || []).forEach(($modal) => {
+      closeModal($modal);
+    });
+  }
+
+  // Add a click event on buttons to open a specific modal
+  (document.querySelectorAll('.js-modal-trigger') || []).forEach(($trigger) => {
+    const modal = $trigger.dataset.target;
+    const $target = document.getElementById(modal);
+
+    $trigger.addEventListener('click', () => {
+      openModal($target);
+    });
+  });
+
+  // Add a click event on various child elements to close the parent modal
+  (document.querySelectorAll('.modal-background, .modal-close, .modal-card-head .delete, .modal-card-foot .button') || []).forEach(($close) => {
+    const $target = $close.closest('.modal');
+
+    $close.addEventListener('click', () => {
+      closeModal($target);
+    });
+  });
+
+  // Add a keyboard event to close all modals
+  document.addEventListener('keydown', (event) => {
+    if(event.key === "Escape") {
+      closeAllModals();
+    }
+  });
+});

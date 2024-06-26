@@ -3,7 +3,6 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Certified Cinephile</title>
     <link rel="stylesheet" type="text/css" href="./assets/style.css" />
     <script
       src="https://code.jquery.com/jquery-3.5.1.min.js"
@@ -90,19 +89,40 @@
 
   </main>
   <main id="game-page" class="columns is-desktop page out">
+
     <div class="columns">
-      <div id="movie" class="column is-full-mobile is-half-tablet is-half-desktop">
-        <p class="title is-size-4" id="round-display"></p>
-        <p id="movie-title"></p>
+      <div id="movie" class="column p-6 is-full-mobile is-half-tablet is-half-desktop">
+        <p class="title is-size-6" id="round-display"></p>
+        <p class ="title my-1 is-size-6" id="movie-title"></p>
         <p id="movie-poster"></p>
         <p id="movie-summary"></p>
       </div>
 
-      <div id="input" class="column is-full-mobile is-half-tablet is-half-desktop">
-        <p>Player Input</p>
+      <div id="input" class="column is-full-mobile is-half-tablet is-half-desktop columns">
+        <p></p>
         <div></div>
         <div></div>
-        <button id="guess" class="button">Submit</button>
+
+        <div id="player-input" class="modal">
+          <div class="modal-background"></div>
+          <div class="modal-card">
+            <section class="modal-card-body">
+              <div class="content">
+                <p>Example Text</p>
+                <p>Example Text</p>
+                <p>Example Text</p>
+              </div>
+            </section>
+            <footer class="modal-card-foot">
+              <div class="buttons">
+                <button id="next-round" class="button is-success" aria-label="Next Round">Next Round</button>
+              </div>
+            </footer>
+          </div>
+        </div>
+
+        <div class="column"><button id="guess" class="js-modal-trigger button" data-target="player-input">Submit</button></div>
+      
       </div>
     </div>
   </main>
