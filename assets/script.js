@@ -21,6 +21,9 @@ if (players === null) {
 const API_KEY = '3306c7ffcda8121e53d4fb1e95e8750c';
 const TMDB_URL = `https://api.themoviedb.org/3/movie/11?api_key=${API_KEY}&language=en-US&page=1`;
 
+const OMDB_API_KEY = '874bcd93';
+const OMDB_URL = 'http://www.omdbapi.com/?apikey=874bcd93&';
+
 const collectPlayers = function () {
   //   const players = [];
   let keepEntering = true;
@@ -54,10 +57,27 @@ const logStoredPlayers = function () {
   }
 };
 
-const displayMovie = function(movie) {
-  document.getElementById('movie-title').textContent = movie.title;
-  document.getElementById('movie-poster').innerHTML = `<img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title} Poster">`;
-  document.getElementById('movie-summary').textContent = `Summary: ${movie.overview}`;
+// Function to fetch Rotten Tomatoes score from OMDB API
+const fetchRottenTomatoesScore = function(movieTitle) {
+  fetch(`${OMDB_URL}?apikey=${OMDB_API_KEY}&t=${encodeURIComponent(movieTitle)}`)
+    .then(response => response.json())
+    .then(data => {
+      if (data.Ratings) {
+        const rtRating = data.Ratings.find(rating => rating.Source === "Rotten Tomatoes");
+        if (rtRating) {
+          console.log(`Rotten Tomatoes Score: ${rtRating.Value}`);
+          // Display Rotten Tomatoes score on the page
+          const rtScoreElement = document.createElement("div");
+          rtScoreElement.innerHTML = `Rotten Tomatoes Score: ${rtRating.Value}`;
+          document.getElementById('movie-details').appendChild(rtScoreElement);
+        } else {
+          console.log("Rotten Tomatoes score not found.");
+        }
+      } else {
+        console.log("Ratings not found.");
+      }
+    })
+    .catch(err => console.error(err));
 };
 
 // This function begins when Start Game button on Landing Page is pressed.
@@ -73,11 +93,30 @@ const gameStart = function() {
       }
     };
     
-    fetch('https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&year=2019', options)
-    .then(response => response.json())
-    .then(response => console.log(response))
+    fetch('https://api.themoviedb.org/3/movie/now_playing?&page=2&region=US&api_key=5532930052be6e0e9545c5d93651df5f', options)
+      .then(response => response.json())
+      .then(function (movie) {
+        console.log(movie);
+        rMI = Math.floor(Math.random()*10);
+        movieTitle = document.createElement("div");
+        movieTitle.innerHTML = `${movie.results[rMI].title}`;
+        document.getElementById('movie-title').appendChild(movieTitle);
+
+
+        // document.getElementById('movie-title').textContent = movie.title;
+        
+        moviePoster = document.createElement("div");
+        moviePoster.innerHTML = `<img src="https://image.tmdb.org/t/p/w500${movie.results[rMI].poster_path}" alt="${movie.results[rMI].title} Poster" sizes="40em">`;
+        document.getElementById('movie-poster').appendChild(moviePoster);
+        
+        // .innerHTML = `<img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title} Poster">`;
+        // document.getElementById('movie-summary').textContent = `Summary: ${movie.overview}`;
+     
+
+      // Fetch and display Rotten Tomatoes score
+      fetchRottenTomatoesScore(movieTitle);
+    })
     .catch(err => console.error(err));
-      
 
 
     // This is the screen transition script.
@@ -87,6 +126,9 @@ const gameStart = function() {
     setInterval(gamePage.setAttribute("class", "page in"),500);
     };
 
+    //Starter code for retrieving Rotten Tomatoes Scores//
+
+    
 
 
 // TODO: I started to put together a function to call when checking score player enters versus their guessed score. It is incomplete. This would probably be a good place to have API fetch request to pull Rotten Tomatoes scores from OMDB.
@@ -100,6 +142,47 @@ const guessCheck = function() {
 const gameResults = function() {
     if (roundCount !== 10) {
     roundCount++;
+
+    const options = {
+      method: 'GET',
+      headers: {
+        accept: 'application/json',
+        Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIzMzA2YzdmZmNkYTgxMjFlNTNkNGZiMWU5NWU4NzUwYyIsIm5iZiI6MTcxOTI3MzM0NS41ODQ4NzksInN1YiI6IjY2NzhlOWQxMjlmMjg4YjIzZGNlYjFmZiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.NMjKDHRmOC_UqZoOMZCSaXOYdKwZmvsvKPuUo_XICn0'
+      }
+    };
+
+    fetch('https://api.themoviedb.org/3/movie/now_playing?&page=2&region=US&api_key=5532930052be6e0e9545c5d93651df5f', options)
+    .then(response => response.json())
+    .then(function (movie) {
+      console.log(movie);
+      rMI = Math.floor(Math.random()*20);
+      movieTitle = document.createElement("div");
+      movieTitle.setAttribute("id", `movieno${roundCount}`);
+      movieTitle.innerHTML = `${movie.results[rMI].title}`;
+      if (document.getElementById('movie-title').childElementCount!==0); {
+      document.getElementById('movie-title').removeChild(`movieno${roundCount}`);
+      }
+      document.getElementById('movie-title').appendChild(movieTitle);
+
+
+      // document.getElementById('movie-title').textContent = movie.title;
+      
+      moviePoster = document.createElement("div");
+      moviePoster.setAttribute("id", `moviepno${roundCount}`);
+      moviePoster.innerHTML = `<img src="https://image.tmdb.org/t/p/w500${movie.results[rMI].poster_path}" alt="${movie.results[rMI].title} Poster" sizes="40em">`;
+      if (document.getElementById('movie-poster').childElementCount!==0); {
+        document.getElementById('movie-poster').removeChild(`moviepno${roundCount}`);
+        }
+      document.getElementById('movie-poster').appendChild(moviePoster);
+      
+      // .innerHTML = `<img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title} Poster">`;
+      // document.getElementById('movie-summary').textContent = `Summary: ${movie.overview}`;
+  
+    // Fetch and display Rotten Tomatoes score
+    fetchRottenTomatoesScore(movieTitle);
+  })
+  .catch(err => console.error(err));
+    
     roundDisplay.innerHTML = `Round:${roundCount}/10`;
     console.log(roundCount);
     } else if (roundCount === 10) {
