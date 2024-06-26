@@ -114,22 +114,14 @@ p {
 
 #movie {
   margin: 0;
-  width: 49%;
-  float: left;
   color: rgb(255, 255, 255);
   height: 100vh;
-  border: solid;
-  border-radius: 20px;
 }
 
 #input {
   margin: 0;
-  width: 49%;
-  float: left;
   color: rgb(255, 255, 255);
   height: 100vh;
-  border: solid;
-  border-radius: 20px;
 }
 
 #movie p {
@@ -194,4 +186,14 @@ li {
   border: 1px solid #ddd; /* Example border */
   border-radius: 5px; /* Rounded corners */
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Example shadow */
+}
+
+@media screen and (max-width:768px) {
+#movie {
+  height:700px;
+}
+#input {
+  height:100px;
+}
+  
 }

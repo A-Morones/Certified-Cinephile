@@ -90,7 +90,7 @@ const gameStart = function () {
         moviePoster = document.createElement("div");
 
         moviePoster.innerHTML = `<img src="https://image.tmdb.org/t/p/w500${movie.results[rMI].poster_path}" alt="${movie.results
-        [rMI].title} Poster" width="300em">`;
+        [rMI].title} Poster" width="350em">`;
         moviePoster.setAttribute("id", "poppedMoviePoster");
 
         if (document.getElementById("movie-poster").childElementCount !== 0)
@@ -107,8 +107,8 @@ const gameStart = function () {
   // This is the screen transition script.
   // It applies CSS classes that effectively slide the current containers off screen to be replaced by the next screen.
   landingPage.setAttribute("class", "page out");
-  setInterval(gamePage.setAttribute("class", "page load"), 500);
-  setInterval(gamePage.setAttribute("class", "page in"), 500);
+  setTimeout(gamePage.setAttribute("class", "page load"), 500);
+  setTimeout(gamePage.setAttribute("class", "page in"), 500);
 };
 
 // TODO: I started to put together a function to call when checking score player enters versus their guessed score. It is incomplete. This would probably be a good place to have API fetch request to pull Rotten Tomatoes scores from OMDB.
@@ -157,7 +157,7 @@ const gameResults = function () {
         moviePoster = document.createElement("div");
 
         moviePoster.innerHTML = `<img src="https://image.tmdb.org/t/p/w500${movie.results[rMI].poster_path}" alt="${movie.results
-        [rMI].title} Poster" width="300em">`;
+        [rMI].title} Poster" width="350em">`;
         moviePoster.setAttribute("id", "poppedMoviePoster");
 
         if (document.getElementById("movie-poster").childElementCount !== 0)
