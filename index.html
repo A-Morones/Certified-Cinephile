@@ -48,11 +48,17 @@
       </div>
       <h2>Guess the Rotten Tomatoes Score!</h2>
     </header>
-    <div>
-      <div class="card-footer">
-        <button id="add-player-btn" class="btn">Who is Playing?</button>
+    <!-- <div> -->
+      <!-- <div class="card-footer"> -->
+        <!-- <button id="add-player-btn" class="btn">Who is Playing?</button>
         <button id="show-rules-btn" class="btn">Game Rules</button>
-        <button id="start-game-btn" class="btn">Start Game</button>
+        <button id="start-game-btn" class="btn">Start Game</button> -->
+        <div class="container">
+        <div class="buttons is-centered mt-5">
+          <button id="add-player-btn" class="button is-primary">Who is Playing?</button>
+          <button id="show-rules-btn" class="button is-primary">Game Rules</button>
+          <button id="start-game-btn" class="button is-primary">Start Game</button>
+      </div>
       </div>
     </div>
     <!-- The Modal -->
@@ -83,31 +89,34 @@
     </div>
 
   </main>
-  <main id="game-page" class="page out">
-    <div class="columns"></div>
-      <div id="movie" class="column">
-        <p id="round-display"></p>
+  <main id="game-page" class="columns is-desktop page out">
+    <div class="columns">
+      <div id="movie" class="column is-full-mobile is-half-tablet is-half-desktop">
+        <p class="title is-size-4" id="round-display"></p>
         <p id="movie-title"></p>
         <p id="movie-poster"></p>
         <p id="movie-summary"></p>
       </div>
 
-      <div id="input" class="column">
+      <div id="input" class="column is-full-mobile is-half-tablet is-half-desktop">
         <p>Player Input</p>
         <div></div>
         <div></div>
+
         <button id="guess" class="btn">Submit</button>
         <div class="container">
           <div class="number-box" id="numberBox">0</div>
         </div>
+
       </div>
     </div>
   </main>
   <main id="results-page" class="page out">
     <aside id="results">
         <p>You Won or Lost!</p>
-        <button id="play-again" class="btn">Play Again?</button>
+        <button id="play-again" class="button">Play Again?</button>
   </main>
+  <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
     <script src="./assets/script.js"></script>
   </body>
 </html>
