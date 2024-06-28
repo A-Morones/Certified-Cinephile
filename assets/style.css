@@ -194,7 +194,7 @@ li {
   position: fixed; /* Stay in place */
   z-index: 1; /* Sit on top */
   left: 0;
-  top: 0;
+  top: 150px;
   width: 100%; /* Full width */
   height: 100%; /* Full height */
   overflow: auto; /* Enable scroll if needed */
@@ -224,12 +224,11 @@ li {
   cursor: pointer;
 }
 
-@media screen and (max-width:768px) {
-#movie {
-  height:700px;
-}
-#input {
-  height:100px;
-}
-  
+@media screen and (max-width: 768px) {
+  #movie {
+    height: 700px;
+  }
+  #input {
+    height: 100px;
+  }
 }
