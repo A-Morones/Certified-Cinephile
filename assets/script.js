@@ -57,6 +57,7 @@ const logStoredPlayers = function () {
 // This function begins when Start Game button on Landing Page is pressed.
 const gameStart = function () {
   roundDisplay.innerHTML = `Round:${roundCount}/10`;
+  let rPg = Math.floor(Math.random()*300);
 
   // Fetch a random now-playing movie from TMDB API
   const options = {
@@ -69,7 +70,7 @@ const gameStart = function () {
   };
 
   fetch(
-    "https://api.themoviedb.org/3/movie/now_playing?&page=2&region=US&api_key=5532930052be6e0e9545c5d93651df5f",
+    `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=true&language=en-US&page=${rPg}&sort_by=popularity.desc&with_original_language=en&&release_date.lte=${dayjs().format('MM-DD-YYYY')}&api_key=${API_KEY}`,
     options
   )
     .then((response) => response.json())
@@ -77,14 +78,26 @@ const gameStart = function () {
       console.log(movie);
       rMI = Math.floor(Math.random() * 10);
       movieTitle = document.createElement("div");
+      movieTitle.setAttribute("id", "poppedMovieTitle");
       movieTitle.innerHTML = `${movie.results[rMI].title}`;
-      document.getElementById("movie-title").appendChild(movieTitle);
+      if (document.getElementById("movie-title").childElementCount !== 0)
+        {
+          document.getElementById("movie-title").removeChild(document.getElementById("poppedMovieTitle"));
+        }
+        document.getElementById("movie-title").appendChild(movieTitle);
+        console.log(document.getElementById("movie-title").children[0]);
 
-      // document.getElementById('movie-title').textContent = movie.title;
+        moviePoster = document.createElement("div");
 
-      moviePoster = document.createElement("div");
-      moviePoster.innerHTML = `<img src="https://image.tmdb.org/t/p/w500${movie.results[rMI].poster_path}" alt="${movie.results[rMI].title} Poster" sizes="40em">`;
-      document.getElementById("movie-poster").appendChild(moviePoster);
+        moviePoster.innerHTML = `<img src="https://image.tmdb.org/t/p/w500${movie.results[rMI].poster_path}" alt="${movie.results
+        [rMI].title} Poster" width="350em">`;
+        moviePoster.setAttribute("id", "poppedMoviePoster");
+
+        if (document.getElementById("movie-poster").childElementCount !== 0)
+        {
+          document.getElementById("movie-poster").removeChild(document.getElementById("poppedMoviePoster"));
+        }
+        document.getElementById("movie-poster").appendChild(moviePoster);
 
       // .innerHTML = `<img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title} Poster">`;
       // document.getElementById('movie-summary').textContent = `Summary: ${movie.overview}`;
@@ -94,8 +107,8 @@ const gameStart = function () {
   // This is the screen transition script.
   // It applies CSS classes that effectively slide the current containers off screen to be replaced by the next screen.
   landingPage.setAttribute("class", "page out");
-  setInterval(gamePage.setAttribute("class", "page load"), 500);
-  setInterval(gamePage.setAttribute("class", "page in"), 500);
+  setTimeout(gamePage.setAttribute("class", "page load"), 500);
+  setTimeout(gamePage.setAttribute("class", "page in"), 500);
 };
 
 // TODO: I started to put together a function to call when checking score player enters versus their guessed score. It is incomplete. This would probably be a good place to have API fetch request to pull Rotten Tomatoes scores from OMDB.
@@ -110,6 +123,7 @@ const guessCheck = function () {
 const gameResults = function () {
   if (roundCount !== 10) {
     roundCount++;
+    let rPg = Math.floor(Math.random()*300);
 
     const options = {
       method: "GET",
@@ -121,7 +135,7 @@ const gameResults = function () {
     };
 
     fetch(
-      "https://api.themoviedb.org/3/movie/now_playing?&page=2&region=US&api_key=5532930052be6e0e9545c5d93651df5f",
+      `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=true&language=en-US&page=${rPg}&sort_by=popularity.desc&with_original_language=en&&release_date.lte=${dayjs().format('MM-DD-YYYY')}&api_key=${API_KEY}`,
       options
     )
       .then((response) => response.json())
@@ -129,26 +143,26 @@ const gameResults = function () {
         console.log(movie);
         rMI = Math.floor(Math.random() * 20);
         movieTitle = document.createElement("div");
-        movieTitle.setAttribute("id", `movieno${roundCount}`);
+        movieTitle.setAttribute("id", "poppedMovieTitle");
         movieTitle.innerHTML = `${movie.results[rMI].title}`;
-        if (document.getElementById("movie-title").childElementCount !== 0);
+        if (document.getElementById("movie-title").childElementCount !== 0)
         {
-          document
-            .getElementById("movie-title")
-            .removeChild(`movieno${roundCount}`);
+          document.getElementById("movie-title").removeChild(document.getElementById("poppedMovieTitle"));
         }
         document.getElementById("movie-title").appendChild(movieTitle);
+        console.log(document.getElementById("movie-title").children[0]);
 
         // document.getElementById('movie-title').textContent = movie.title;
 
         moviePoster = document.createElement("div");
-        moviePoster.setAttribute("id", `moviepno${roundCount}`);
-        moviePoster.innerHTML = `<img src="https://image.tmdb.org/t/p/w500${movie.results[rMI].poster_path}" alt="${movie.results[rMI].title} Poster" sizes="40em">`;
-        if (document.getElementById("movie-poster").childElementCount !== 0);
+
+        moviePoster.innerHTML = `<img src="https://image.tmdb.org/t/p/w500${movie.results[rMI].poster_path}" alt="${movie.results
+        [rMI].title} Poster" width="350em">`;
+        moviePoster.setAttribute("id", "poppedMoviePoster");
+
+        if (document.getElementById("movie-poster").childElementCount !== 0)
         {
-          document
-            .getElementById("movie-poster")
-            .removeChild(`moviepno${roundCount}`);
+          document.getElementById("movie-poster").removeChild(document.getElementById("poppedMoviePoster"));
         }
         document.getElementById("movie-poster").appendChild(moviePoster);
 
@@ -158,8 +172,13 @@ const gameResults = function () {
       .catch((err) => console.error(err));
 
     roundDisplay.innerHTML = `Round:${roundCount}/10`;
-    console.log(roundCount);
+
   } else if (roundCount === 10) {
+
+    document.getElementById("movie-title").removeChild(document.getElementById("poppedMovieTitle"));
+    
+    document.getElementById("movie-poster").removeChild(document.getElementById("poppedMoviePoster"));
+
     gamePage.setAttribute("class", "page out");
     setInterval(resultsPage.setAttribute("class", "page load"), 500);
     resultsPage.setAttribute("class", "page in");
@@ -172,6 +191,15 @@ const restartGame = function () {
   setInterval(landingPage.setAttribute("class", "page load"), 500);
   landingPage.setAttribute("class", "page in");
 };
+
+const checkScore = function(RTscore) {
+  let guessedScore;
+  let accuracy = 1 - (Math.abs(`${RTscore}` - guessedScore))/100
+  let weightedAccuracy = Math.pow(accuracy, 2) 
+  let maxPoints = 50;
+  let earnedPoints = maxPoints * weightedAccuracy;
+  return earnedPoints;
+}
 
 // Event listeners below. The names should be helpful in discerning which is which.
 addPlayerBtn.addEventListener("click", trackPlayersData);

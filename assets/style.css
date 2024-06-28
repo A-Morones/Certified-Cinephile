@@ -114,22 +114,14 @@ p {
 
 #movie {
   margin: 0;
-  width: 49%;
-  float: left;
   color: rgb(255, 255, 255);
   height: 100vh;
-  border: solid;
-  border-radius: 20px;
 }
 
 #input {
   margin: 0;
-  width: 49%;
-  float: left;
   color: rgb(255, 255, 255);
   height: 100vh;
-  border: solid;
-  border-radius: 20px;
 }
 
 #movie p {
@@ -230,4 +222,14 @@ li {
   color: red;
   text-decoration: none;
   cursor: pointer;
+}
+
+@media screen and (max-width:768px) {
+#movie {
+  height:700px;
+}
+#input {
+  height:100px;
+}
+  
 }
