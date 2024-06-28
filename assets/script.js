@@ -4,6 +4,7 @@ const startBtn = document.getElementById("start-game-btn");
 
 const gamePage = document.getElementById("game-page");
 const guessBtn = document.getElementById("guess");
+const numberBox = document.getElementById('numberBox');
 
 const resultsPage = document.getElementById("results-page");
 const roundDisplay = document.getElementById("round-display");
@@ -12,6 +13,7 @@ const playAgain = document.getElementById("play-again");
 
 // Initialize game state as Round 1.
 let roundCount = 1;
+let number = 0;
 
 let players = JSON.parse(localStorage.getItem("playersData"));
 if (players === null) {
@@ -116,6 +118,23 @@ const guessCheck = function () {
   if (guessedScore === actualScore) {
   }
 };
+
+    function updateNumber(deltaY) {
+      if (deltaY > 0) {    
+        number--;
+      } else {    
+        number++;
+      }
+      numberBox.textContent = number;
+    }
+    
+    
+    window.addEventListener('wheel', function(e) {
+      e.preventDefault();
+    
+      
+      updateNumber(e.deltaY);
+    });
 
 // This function is called when the Submit button on the Gameplay screen is pressed. It will increment the current 'Round' up to 10. After Round 10 the final round it will transition to the Game Results screen, which would be the final screen. WIP.
 
