@@ -88,18 +88,18 @@
     </div>
 
   </main>
-  <main id="game-page" class="columns is-desktop page out">
+  <main id="game-page" class="columns is-desktop page out-right">
 
-    <div class="columns">
-      <div id="movie" class="column p-6 is-full-mobile is-half-tablet is-half-desktop">
-        <p class="title is-size-6" id="round-display"></p>
+    <div class="columns m-0">
+      <div id="movie" class="column px-6 is-full-mobile is-two-thirds-tablet is-two-thirds-desktop">
+        <progress class="progress mt-3 mb-2 is-small" value="10" max="100" id="round-display"></progress>
         <p class ="title my-1 is-size-6" id="movie-title"></p>
         <p id="movie-poster"></p>
         <p id="movie-summary"></p>
       </div>
 
-      <div id="input" class="column is-full-mobile is-half-tablet is-half-desktop columns">
-        <p></p>
+      <div id="input" class="column is-full-mobile is-one-thirds-tablet is-one-fourths-desktop columns">
+
         <div></div>
         <div></div>
 
@@ -121,14 +121,14 @@
           </div>
         </div>
 
-        <div class="column"><button id="guess" class="js-modal-trigger button" data-target="player-input">Submit</button></div>
+        <div class="column is-flex is-justify-content-flex-end"><button id="guess" class="js-modal-trigger button is-primary is-outlined is-rounded" data-target="player-input">Submit</button></div>
       
       </div>
     </div>
   </main>
-  <main id="results-page" class="page out">
+  <main id="results-page" class="page out-left">
     <aside id="results">
-        <p>You Won or Lost!</p>
+        <p id="results-text">Let's see how you did ...</p>
         <button id="play-again" class="button">Play Again?</button>
   </main>
   <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>

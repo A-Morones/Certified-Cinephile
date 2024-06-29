@@ -57,7 +57,7 @@ const logStoredPlayers = function () {
 
 // This function begins when Start Game button on Landing Page is pressed.
 const gameStart = function () {
-  roundDisplay.innerHTML = `Round:${roundCount}/10`;
+  roundDisplay.value = roundCount*10;
   let rPg = Math.floor(Math.random()*300);
 
   // Fetch a random now-playing movie from TMDB API
@@ -77,7 +77,7 @@ const gameStart = function () {
     .then((response) => response.json())
     .then(function (movie) {
       console.log(movie);
-      rMI = Math.floor(Math.random() * 10);
+      rMI = Math.floor(Math.random() * 20);
       movieTitle = document.createElement("div");
       movieTitle.setAttribute("id", "poppedMovieTitle");
       movieTitle.innerHTML = `${movie.results[rMI].title}`;
@@ -89,10 +89,37 @@ const gameStart = function () {
         console.log(document.getElementById("movie-title").children[0]);
 
         moviePoster = document.createElement("div");
-
+        
         moviePoster.innerHTML = `<img id="poster-img" src="https://image.tmdb.org/t/p/w500${movie.results[rMI].poster_path}" alt="${movie.results
-        [rMI].title} Poster" width="300em">`;
+        [rMI].title} Poster" width="350em">`;
         moviePoster.setAttribute("id", "poppedMoviePoster");
+        moviePoster.setAttribute("class", "pt-3 columns is-mobile is-centered");
+
+        let posterFlipped = false;
+        let flipsides = function () {
+          console.log(posterFlipped);
+          if (posterFlipped === false) {
+          console.log(`poster clicked`);
+          moviePoster.innerHTML =`<div id="poster-img" style="background-color:rgb(32, 32, 33); width:350px; height:525px;"><p class="is-size-5 p-2 has-text-left">${movie.results[rMI].overview}</p></div>`;
+          posterFlipped = true;
+          }
+          else if (posterFlipped === true) { moviePoster.innerHTML = `<img id="poster-img" src="https://image.tmdb.org/t/p/w500${movie.results[rMI].poster_path}" alt="${movie.results
+          [rMI].title} Poster" width="350em">`;
+          posterFlipped = false;
+          }
+        }
+        moviePoster.addEventListener("click", flipsides);
+
+
+
+        // let synopsis = movie.results[rMI].overview;
+        // let sideA = `<img id="poster-img" src="https://image.tmdb.org/t/p/w500${movie.results[rMI].poster_path}" alt="${movie.results
+        // [rMI].title} Poster" width="300em">`
+        // let sideB = `<p id="poster-img" width="300em">${movie.results[rMI].overview}</p>`
+        // moviePoster.innerHTML = sideA;
+        // moviePoster.innerHTML = sideB;
+        // moviePoster.addEventListener("click", flipsides());
+
 
         if (document.getElementById("movie-poster").childElementCount !== 0)
         {
@@ -110,7 +137,7 @@ const gameStart = function () {
   // It applies CSS classes that effectively slide the current containers off screen to be replaced by the next screen.
   landingPage.setAttribute("class", "page out");
   setTimeout(gamePage.setAttribute("class", "page load"), 500);
-  setTimeout(gamePage.setAttribute("class", "page in"), 500);
+  setTimeout(gamePage.setAttribute("class", "page in-right"), 500);
 };
 
 // TODO: I started to put together a function to call when checking score player enters versus their guessed score. It is incomplete. This would probably be a good place to have API fetch request to pull Rotten Tomatoes scores from OMDB.
@@ -146,7 +173,9 @@ const nextRoundFunction = function () {
         rMI = Math.floor(Math.random() * 20);
         movieTitle = document.createElement("div");
         movieTitle.setAttribute("id", "poppedMovieTitle");
+
         movieTitle.innerHTML = `${movie.results[rMI].title}`;
+
         if (document.getElementById("movie-title").childElementCount !== 0)
         {
           document.getElementById("movie-title").removeChild(document.getElementById("poppedMovieTitle"));
@@ -157,10 +186,10 @@ const nextRoundFunction = function () {
         // document.getElementById('movie-title').textContent = movie.title;
 
         moviePoster = document.createElement("div");
-
-        moviePoster.innerHTML = `<img src="https://image.tmdb.org/t/p/w500${movie.results[rMI].poster_path}" alt="${movie.results
-        [rMI].title} Poster" width="300em">`;
+        moviePoster.innerHTML = `<img id="poster-img" src="https://image.tmdb.org/t/p/w500${movie.results[rMI].poster_path}" alt="${movie.results
+        [rMI].title} Poster" width="350em">`;
         moviePoster.setAttribute("id", "poppedMoviePoster");
+        moviePoster.setAttribute("class", "pt-3 columns is-mobile is-centered");
         
 
         if (document.getElementById("movie-poster").childElementCount !== 0)
@@ -168,6 +197,22 @@ const nextRoundFunction = function () {
           document.getElementById("movie-poster").removeChild(document.getElementById("poppedMoviePoster"));
         }
         document.getElementById("movie-poster").appendChild(moviePoster);
+        let posterFlipped = false;
+        let flipsides = function (event) {
+          if (posterFlipped === false) {
+          console.log(`poster clicked`);
+          moviePoster.innerHTML =`<div id="poster-img" style="background-color:rgb(32, 32, 33); width:350px; height:525px;"><p class="is-size-5 p-2 has-text-left">${movie.results[rMI].overview}</p></div`;
+          posterFlipped = true;
+          }
+
+          else if (posterFlipped === true) { moviePoster.innerHTML = `<img id="poster-img" src="https://image.tmdb.org/t/p/w500${movie.results[rMI].poster_path}" alt="${movie.results
+          [rMI].title} Poster" width="350em">`;
+          posterFlipped = false;
+          }
+        }
+        moviePoster.addEventListener("click", flipsides);
+
+
         console.log(document.getElementById("movie-poster").getBoundingClientRect());
 
         // .innerHTML = `<img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title} Poster">`;
@@ -175,7 +220,7 @@ const nextRoundFunction = function () {
       })
       .catch((err) => console.error(err));
 
-    roundDisplay.innerHTML = `Round:${roundCount}/10`;
+    roundDisplay.value = roundCount*10;
 
   } else if (roundCount === 10) {
 
@@ -183,47 +228,27 @@ const nextRoundFunction = function () {
     
     document.getElementById("movie-poster").removeChild(document.getElementById("poppedMoviePoster"));
 
-    gamePage.setAttribute("class", "page out");
+    gamePage.setAttribute("class", "page out-right");
     setInterval(resultsPage.setAttribute("class", "page load"), 500);
-    resultsPage.setAttribute("class", "page in");
+    resultsPage.setAttribute("class", "page in-left");
   }
 };
 
 const restartGame = function () {
   roundCount = 1;
-  resultsPage.setAttribute("class", "page out");
+  resultsPage.setAttribute("class", "page out-left");
   setInterval(landingPage.setAttribute("class", "page load"), 500);
-  landingPage.setAttribute("class", "page in");
+  landingPage.setAttribute("class", "page in-left");
 };
 
 const checkScore = function(RTscore) {
   let guessedScore;
-  let accuracy = 1 - (Math.abs(`${RTscore}` - guessedScore))/100
-  let weightedAccuracy = Math.pow(accuracy, 2) 
+  let accuracy = 1 - (Math.abs(`${RTscore}` - guessedScore))/100;
+  let weightedAccuracy = Math.pow(accuracy, 2);
   let maxPoints = 50;
   let earnedPoints = maxPoints * weightedAccuracy;
   return earnedPoints;
 }
-
-
-// const timerPoster = function() {
-//   do
-//   const options = {
-//     method: "GET",
-//     headers: {
-//       accept: "application/json",
-//       Authorization:
-//         "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIzMzA2YzdmZmNkYTgxMjFlNTNkNGZiMWU5NWU4NzUwYyIsIm5iZiI6MTcxOTI3MzM0NS41ODQ4NzksInN1YiI6IjY2NzhlOWQxMjlmMjg4YjIzZGNlYjFmZiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.NMjKDHRmOC_UqZoOMZCSaXOYdKwZmvsvKPuUo_XICn0",
-//     },
-//   };
-
-//   fetch(
-//     `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=true&language=en-US&page=${rPg}&sort_by=popularity.desc&with_original_language=en&&release_date.lte=${dayjs().format('MM-DD-YYYY')}&api_key=${API_KEY}`,
-//     options
-//   )
-//   while posterCarousel === true;
-// }
-
 
 
 // Event listeners below. The names should be helpful in discerning which is which.
