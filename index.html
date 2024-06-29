@@ -121,7 +121,15 @@
           </div>
         </div>
 
-        <div class="column is-flex is-justify-content-flex-end"><button id="guess" class="js-modal-trigger button is-primary is-outlined is-rounded" data-target="player-input">Submit</button></div>
+        <div class="column columns is-multiline">
+          <p id="call-to-action" style="height:100px;" class="mb-0 is-size-6 column is-half-desktop is-offset-one-quarter">Guess the Rotten Tomatoes score!</p>
+          <input class="column is-narrow-mobile is-half-desktop is-offset-one-quarter"></input>
+          <button id="guess" class="js-modal-trigger column button is-primary is-outlined is-rounded is-half-desktop is-offset-one-quarter" data-target="player-input">
+            <span class="icon is-large">
+            <i class="fa-solid fa-circle-check" style="color: #63E6BE;"></i>
+            </span>
+          </button>
+        </div>
       
       </div>
     </div>
@@ -132,6 +140,7 @@
         <button id="play-again" class="button">Play Again?</button>
   </main>
   <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+  <script src="https://kit.fontawesome.com/2659513f6a.js" crossorigin="anonymous"></script>
     <script src="./assets/script.js"></script>
   </body>
 </html>

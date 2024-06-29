@@ -77,6 +77,7 @@ const gameStart = function () {
     .then((response) => response.json())
     .then(function (movie) {
       console.log(movie);
+      console.log(`${dayjs().format('MM-DD-YYYY')}`);
       rMI = Math.floor(Math.random() * 20);
       movieTitle = document.createElement("div");
       movieTitle.setAttribute("id", "poppedMovieTitle");
