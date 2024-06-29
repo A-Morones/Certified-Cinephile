@@ -110,17 +110,6 @@ const gameStart = function () {
         }
         moviePoster.addEventListener("click", flipsides);
 
-
-
-        // let synopsis = movie.results[rMI].overview;
-        // let sideA = `<img id="poster-img" src="https://image.tmdb.org/t/p/w500${movie.results[rMI].poster_path}" alt="${movie.results
-        // [rMI].title} Poster" width="300em">`
-        // let sideB = `<p id="poster-img" width="300em">${movie.results[rMI].overview}</p>`
-        // moviePoster.innerHTML = sideA;
-        // moviePoster.innerHTML = sideB;
-        // moviePoster.addEventListener("click", flipsides());
-
-
         if (document.getElementById("movie-poster").childElementCount !== 0)
         {
           document.getElementById("movie-poster").removeChild(document.getElementById("poppedMoviePoster"));
@@ -128,8 +117,6 @@ const gameStart = function () {
         document.getElementById("movie-poster").appendChild(moviePoster);
         console.log(document.getElementById("movie-poster").getBoundingClientRect());
 
-      // .innerHTML = `<img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title} Poster">`;
-      // document.getElementById('movie-summary').textContent = `Summary: ${movie.overview}`;
     })
     .catch((err) => console.error(err));
 
@@ -215,8 +202,6 @@ const nextRoundFunction = function () {
 
         console.log(document.getElementById("movie-poster").getBoundingClientRect());
 
-        // .innerHTML = `<img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title} Poster">`;
-        // document.getElementById('movie-summary').textContent = `Summary: ${movie.overview}`;
       })
       .catch((err) => console.error(err));
 
