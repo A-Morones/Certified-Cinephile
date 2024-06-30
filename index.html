@@ -107,15 +107,20 @@
           <div class="modal-background"></div>
           <div class="modal-card">
             <section class="modal-card-body">
-              <div class="content">
-                <p>Example Text</p>
-                <p>Example Text</p>
-                <p>Example Text</p>
+              <div class="content columns is-mobile is-multiline">
+                <div id="" class="column is-half mb-0 pb-0">Your guess</div>
+                <div id="" class="column is-half mb-0 pb-0">Actual</div>
+                <div id="player-guessed-score" class="is-size-3 has-text-bold column is-half mt-0 pt-0">99</div>
+                <div id="actual-rt-score" class="is-size-3 has-text-bold column is-half mt-0 pt-0">99</div>
+                <div id="" class="column is-half mb-0 pb-0">Accuracy</div>
+                <div id="" class="column is-half mb-0 pb-0">Points earned</div>
+                <div id="player-accuracy" class="is-size-3 has-text-bold column is-half mt-0 pt-0">100</div>
+                <div id="points-earned" class="is-size-3 has-text-primary has-text-bold column is-half mt-0 pt-0">50</div>
               </div>
             </section>
             <footer class="modal-card-foot">
-              <div class="buttons">
-                <button id="next-round" class="button is-success" aria-label="Next Round">Next Round</button>
+              <div class="buttons columns is-mobile is-centered">
+                <button id="next-round" class="button is-full is-rounded is-success column" aria-label="Next Round">Next Round</button>
               </div>
             </footer>
           </div>
@@ -123,12 +128,14 @@
 
         <div class="column columns is-mobile is-multiline is-vcentered is-centered">
           <div id="call-to-action" style="height:100px;" class="mb-0 is-size-4 column is-one-third-mobile is-two-thirds-tablet is-two-thirds-desktop is-offset-one-sixth-tablet is-offset-one-sixth-desktop">Guess the Rotten Tomatoes score!</div>
-          <input class="input is-rounded is-large column is-one-third-mobile is-two-thirds-tablet is-two-thirds-desktop is-offset-one-sixth-tablet is-offset-one-sixth-desktop" placeholder="1 - 100"></input>
+          <!-- <form class="column is-mobile columns"> -->
+          <input type="number" maxlength="3" id="player-RT-guess-field" class="input is-rounded is-large column is-one-third-mobile is-two-thirds-tablet is-two-thirds-desktop is-offset-one-sixth-tablet is-offset-one-sixth-desktop" placeholder="1 - 100"></input>
           <button id="guess" class="js-modal-trigger column button is-primary is-outlined is-rounded  is-one-fifth-mobile is-two-thirds-tablet is-two-thirds-desktop is-offset-one-sixth-tablet is-offset-one-sixth-desktop" data-target="player-input">
             <span class="icon is-large">
               <i class="fa-solid fa-circle-check fa-2xl" style="color: #63E6BE;"></i>
             </span>
           </button>
+          <!-- </form> -->
         </div>
       
       </div>

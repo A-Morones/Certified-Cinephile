@@ -4,6 +4,14 @@ const startBtn = document.getElementById("start-game-btn");
 
 const gamePage = document.getElementById("game-page");
 const guessBtn = document.getElementById("guess");
+
+const playerValueField = document.getElementById("player-RT-guess-field");
+let playerValue;
+
+const playerGuessedScore = document.getElementById("player-guessed-score");
+const playerAccuracyEl = document.getElementById("player-accuracy");
+const ptsEarnedEl = document.getElementById("points-earned");
+
 const nextRoundBtn = document.getElementById("next-round");
 
 const resultsPage = document.getElementById("results-page");
@@ -92,7 +100,7 @@ const gameStart = function () {
         moviePoster = document.createElement("div");
         
         moviePoster.innerHTML = `<img id="poster-img" src="https://image.tmdb.org/t/p/w500${movie.results[rMI].poster_path}" alt="${movie.results
-        [rMI].title} Poster" width="350em">`;
+        [rMI].title} Poster" width="330em">`;
         moviePoster.setAttribute("id", "poppedMoviePoster");
         moviePoster.setAttribute("class", "pt-3 columns is-mobile is-centered");
 
@@ -101,11 +109,11 @@ const gameStart = function () {
           console.log(posterFlipped);
           if (posterFlipped === false) {
           console.log(`poster clicked`);
-          moviePoster.innerHTML =`<div id="poster-img" style="background-color:rgb(32, 32, 33); width:350px; height:525px;"><p class="is-size-5 p-2 has-text-left">${movie.results[rMI].overview}</p></div>`;
+          moviePoster.innerHTML =`<div id="poster-img" style="background-color:rgb(32, 32, 33); width:330px; height:495px;"><p class="is-size-5 p-2 has-text-left">${movie.results[rMI].overview}</p></div>`;
           posterFlipped = true;
           }
           else if (posterFlipped === true) { moviePoster.innerHTML = `<img id="poster-img" src="https://image.tmdb.org/t/p/w500${movie.results[rMI].poster_path}" alt="${movie.results
-          [rMI].title} Poster" width="380em">`;
+          [rMI].title} Poster" width="330em">`;
           posterFlipped = false;
           }
         }
@@ -175,7 +183,7 @@ const nextRoundFunction = function () {
 
         moviePoster = document.createElement("div");
         moviePoster.innerHTML = `<img id="poster-img" src="https://image.tmdb.org/t/p/w500${movie.results[rMI].poster_path}" alt="${movie.results
-        [rMI].title} Poster" width="350em">`;
+        [rMI].title} Poster" width="330em">`;
         moviePoster.setAttribute("id", "poppedMoviePoster");
         moviePoster.setAttribute("class", "pt-3 columns is-mobile is-centered");
         
@@ -189,12 +197,12 @@ const nextRoundFunction = function () {
         let flipsides = function (event) {
           if (posterFlipped === false) {
           console.log(`poster clicked`);
-          moviePoster.innerHTML =`<div id="poster-img" style="background-color:rgb(32, 32, 33); width:350px; height:525px;"><p class="is-size-5 p-2 has-text-left">${movie.results[rMI].overview}</p></div`;
+          moviePoster.innerHTML =`<div id="poster-img" style="background-color:rgb(32, 32, 33); width:330px; height:495px;"><p class="is-size-5 p-2 has-text-left">${movie.results[rMI].overview}</p></div`;
           posterFlipped = true;
           }
 
           else if (posterFlipped === true) { moviePoster.innerHTML = `<img id="poster-img" src="https://image.tmdb.org/t/p/w500${movie.results[rMI].poster_path}" alt="${movie.results
-          [rMI].title} Poster" width="380em">`;
+          [rMI].title} Poster" width="330em">`;
           posterFlipped = false;
           }
         }
@@ -227,20 +235,29 @@ const restartGame = function () {
   landingPage.setAttribute("class", "page in-left");
 };
 
-const checkScore = function(RTscore) {
-  let guessedScore;
-  let accuracy = 1 - (Math.abs(`${RTscore}` - guessedScore))/100;
+//const checkScore = function(RTscore) {
+  const checkScore = function() {
+  let playerValue = playerValueField.value;
+  console.log(playerValue);
+
+  // let accuracy = 1 - (Math.abs(`${RTscore}` - guessedScore))/100;
+  let accuracy = 1 - (Math.abs(100 - playerValue))/100;
+  let accuracyShow = accuracy * 100 + "%";
   let weightedAccuracy = Math.pow(accuracy, 2);
   let maxPoints = 50;
-  let earnedPoints = maxPoints * weightedAccuracy;
-  return earnedPoints;
+
+  let earnedPoints = Math.round(maxPoints * weightedAccuracy);
+  playerAccuracyEl.innerText = accuracyShow;
+  ptsEarnedEl.innerText = earnedPoints;
+
+  return [accuracy, earnedPoints];
 }
 
 
 // Event listeners below. The names should be helpful in discerning which is which.
 addPlayerBtn.addEventListener("click", trackPlayersData);
 startBtn.addEventListener("click", gameStart);
-// guessBtn.addEventListener("click", gameResults);
+guessBtn.addEventListener("click", checkScore);
 nextRoundBtn.addEventListener("click", nextRoundFunction);
 playAgain.addEventListener("click", restartGame);
 

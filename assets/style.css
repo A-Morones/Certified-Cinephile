@@ -32,7 +32,6 @@ h1 {
   font-style: normal;
   font-size: 6vw;
   margin-bottom: 0px;
-  /* line-height: 5vw; */
   animation: logoanim 1s forwards 1s;
 }
 
@@ -265,6 +264,12 @@ li {
 #poster-img {
   box-shadow: 15px 15px 20px 5px rgb(0, 0, 0, 40%);
   animation: wobble 2s alternate ease-in-out infinite;
+}
+
+.modal-card-body div {
+  font-family: "Oswald", serif;
+  font-weight: 400;
+  font-style: normal;
 }
 
 @media screen and (max-width:768px) {
