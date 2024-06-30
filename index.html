@@ -3,7 +3,6 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Certified Cinephile</title>
     <link rel="stylesheet" type="text/css" href="./assets/style.css" />
     <script
       src="https://code.jquery.com/jquery-3.5.1.min.js"
@@ -38,6 +37,7 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" type="text/css" href="./assets/style.css" />
+
     <script>
       src = "https://code.jquery.com/jquery-3.5.1.min.js";
       integrity = "sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=";
@@ -46,6 +46,7 @@
   </head>
   <body class="min-100-vh flex-column">
     <main id="landing" class="page">
+<<<<<<< HEAD
       <header class="p-5 text-center text-white bg-primary">
         <div class="logo-container">
           <div class="logo-top">
@@ -58,12 +59,26 @@
         </div>
       </header>
       <!-- <div> -->
+=======
+    <header class="p-5 text-center text-white bg-primary">
+    <div class="logo-container"> 
+      <div class = "logo-top">
+      <h1 class="logoA">Certified</h1>
+      </div>
+      <div class="logo-bottom">
+      <h1 class="logoB">CINEPHILE</h1>
+      </div>
+      <h2>Guess the Rotten Tomatoes Score!</h2>
+    </header>
+    <!-- <div> -->
+>>>>>>> 6660ab529286b33fdb1db910b455476a02fca954
       <!-- <div class="card-footer"> -->
       <!-- <button id="add-player-btn" class="btn">Who is Playing?</button>
         <button id="show-rules-btn" class="btn">Game Rules</button>
         <button id="start-game-btn" class="btn">Start Game</button> -->
       <div class="container">
         <div class="buttons is-centered mt-5">
+<<<<<<< HEAD
           <button id="show-rules-btn" class="button is-primary">
             Game Rules
           </button>
@@ -75,6 +90,11 @@
             Start Game
           </button>
         </div>
+=======
+          <button id="add-player-btn" class="button is-primary">Who is Playing?</button>
+          <button id="show-rules-btn" class="button is-primary">Game Rules</button>
+          <button id="start-game-btn" class="button is-primary">Start Game</button>
+>>>>>>> 6660ab529286b33fdb1db910b455476a02fca954
       </div>
 
       <!-- The Modal -->
@@ -105,6 +125,7 @@
           </ul>
         </div>
       </div>
+<<<<<<< HEAD
     </main>
     <main id="game-page" class="columns is-desktop page out">
       <div class="columns">
@@ -135,6 +156,90 @@
       </aside>
     </main>
     <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+=======
+    </div>
+    <!-- The Modal -->
+    <div id="rulesModal" class="modal">
+      <div class="modal">
+        <!-- <span class="close">&times;</span> -->
+        <div class="modal-background">
+        <ul>
+          <li>
+            Players will be asked to guess the Rotten Tomatoes score for a series
+            of movies.
+          </li>
+          <li>
+            Each player will enter their guesses, and the game will compare the
+            guesses to the actual scores.
+          </li>
+          <li>
+            The player whose guess is closest to the actual score wins the
+            round.
+          </li>
+          <li>
+            At the end of the game, the player with the most accurate guesses
+            overall is declared the winner.
+          </li>
+          <li>Have fun and good luck!</li>
+        </ul>
+      </div>
+    </div>
+
+  </main>
+  <main id="game-page" class="columns is-desktop page out-right">
+
+    <div id="col-container" class="columns m-0">
+      <div id="movie" class="column px-6 is-full-mobile is-two-thirds-tablet is-two-thirds-desktop">
+        <progress class="progress mt-3 mb-2 is-small" value="10" max="100" id="round-display"></progress>
+        <p class ="title my-3 is-size-5" id="movie-title"></p>
+        <p id="movie-poster"></p>
+        <p id="movie-summary"></p>
+      </div>
+
+      <div id="input" class="column is-full-mobile is-one-thirds-tablet is-one-fourths-desktop columns">
+
+        <div></div>
+        <div></div>
+
+        <div id="player-input" class="modal">
+          <div class="modal-background"></div>
+          <div class="modal-card">
+            <section class="modal-card-body">
+              <div class="content">
+                <p>Example Text</p>
+                <p>Example Text</p>
+                <p>Example Text</p>
+              </div>
+            </section>
+            <footer class="modal-card-foot">
+              <div class="buttons">
+                <button id="next-round" class="button is-success" aria-label="Next Round">Next Round</button>
+              </div>
+            </footer>
+          </div>
+        </div>
+
+        <div class="column columns is-mobile is-multiline is-vcentered is-centered">
+          <div id="call-to-action" style="height:100px;" class="mb-0 is-size-4 column is-one-third-mobile is-two-thirds-tablet is-two-thirds-desktop is-offset-one-sixth-tablet is-offset-one-sixth-desktop">Guess the Rotten Tomatoes score!</div>
+          <input class="input is-rounded is-large column is-one-third-mobile is-two-thirds-tablet is-two-thirds-desktop is-offset-one-sixth-tablet is-offset-one-sixth-desktop" placeholder="1 - 100"></input>
+          <button id="guess" class="js-modal-trigger column button is-primary is-outlined is-rounded  is-one-fifth-mobile is-two-thirds-tablet is-two-thirds-desktop is-offset-one-sixth-tablet is-offset-one-sixth-desktop" data-target="player-input">
+            <span class="icon is-large">
+              <i class="fa-solid fa-circle-check fa-2xl" style="color: #63E6BE;"></i>
+            </span>
+          </button>
+        </div>
+      
+      </div>
+    </div>
+  </main>
+  <main id="results-page" class="page out-left">
+    <aside id="results">
+        <p id="results-text">Let's see how you did ...</p>
+        <button id="play-again" class="button">Play Again?</button>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+  <script src="https://kit.fontawesome.com/2659513f6a.js" crossorigin="anonymous"></script>
+>>>>>>> 6660ab529286b33fdb1db910b455476a02fca954
     <script src="./assets/script.js"></script>
   </body>
 </html>
