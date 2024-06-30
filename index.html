@@ -27,10 +27,7 @@
       rel="stylesheet"
     />
     <title>Certified Cinephile</title>
-    <!-- <link
-  rel="stylesheet"
-  href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css"
-> -->
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -57,14 +54,14 @@
           <h2>Guess the Rotten Tomatoes Score!</h2>
         </div>
       </header>
-      <!-- <div> -->
-      <!-- <div class="card-footer"> -->
-      <!-- <button id="add-player-btn" class="btn">Who is Playing?</button>
-        <button id="show-rules-btn" class="btn">Game Rules</button>
-        <button id="start-game-btn" class="btn">Start Game</button> -->
+
       <div class="container">
         <div class="buttons is-centered mt-5">
-          <button id="show-rules-btn" class="button is-primary">
+          <button
+            id="show-rules-btn"
+            class="button js-modal-trigger is-primary"
+            data-target="rulesModal"
+          >
             Game Rules
           </button>
           <button id="add-player-btn" class="button is-primary" disabled>
@@ -81,9 +78,7 @@
       <div id="rulesModal" class="modal">
         <div class="modal-content">
           <span class="close">&times;</span>
-          <!-- <div class="modal"> -->
 
-          <!-- <div class="modal-background"> -->
           <ul>
             <li>
               Players will be asked to guess the Rotten Tomatoes score for a
