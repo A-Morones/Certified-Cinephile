@@ -32,6 +32,7 @@ h1 {
   font-style: normal;
   font-size: 6vw;
   margin-bottom: 0px;
+  /* line-height: 5vw; */
   animation: logoanim 1s forwards 1s;
 }
 
@@ -45,14 +46,11 @@ h2 {
   display: flex;
   flex-flow: column;
   align-items: center;
-  animation: wobble 2s alternate ease-in-out infinite;
-  transition: all 1s ease;
 }
 
 .logo-top {
   text-align: center;
   padding: 8px;
-  
 }
 
 .logo-bottom {
@@ -78,9 +76,6 @@ h2 {
   animation: logoanim 1s forwards 1s;
 }
 
-
-
-
 .logoB {
   opacity: 0;
   margin-top: 10px;
@@ -89,8 +84,7 @@ h2 {
   font-family: "Oswald", serif;
   font-weight: 400;
   font-style: normal;
-  font-size: 5.9vw;
-  text-shadow: rgba(149, 1, 1, 0.893) 5px 5px;
+  font-size: 5.5vw;
   letter-spacing: 0.5vw;
   margin-bottom: 0px;
   line-height: 5vw;
@@ -125,7 +119,6 @@ p {
 }
 
 #input {
-  background-color: rgb(32, 32, 33);
   margin: 0;
   color: rgb(255, 255, 255);
   height: 100vh;
@@ -141,30 +134,6 @@ p {
   color: rgb(255, 255, 255);
 }
 
-#poppedMovieTitle {
-  font-family: "Oswald", serif;
-  font-weight: 400;
-  font-style: normal;
-}
-
-#call-to-action {
-  font-family: "Oswald", serif;
-  font-weight: 400;
-  font-style: normal;
-}
-
-#results-page {
-  background-color: white;
-}
-
-#results-text {
-  color:red;
-  font-family: "Shrikhand", serif;
-  font-weight: 400;
-  font-style: normal;
-  font-size: 6vw;
-}
-
 .page.in {
   top: 0;
   opacity: 1;
@@ -175,30 +144,6 @@ p {
   visibility: hidden;
   top: -100%;
   opacity: 0;
-}
-
-.page.in-right {
-  right: 0;
-  opacity: 1;
-}
-
-.page.out-right {
-  position: absolute;
-  visibility: hidden;
-  right: -100%;
-  opacity: 1;
-}
-
-.page.in-left {
-  left: 0;
-  opacity: 1;
-}
-
-.page.out-left {
-  position: absolute;
-  visibility: hidden;
-  left: -100%;
-  opacity: 1;
 }
 
 .page.load {
@@ -221,24 +166,6 @@ p {
   }
 }
 
-@keyframes pulse {
-  0% {
-    transform: scale(0.98);
-  }
-  100% {
-    transform: scale(1.02);
-  }
-}
-
-@keyframes wobble {
-  0% {
-    transform: rotate(1deg);
-  }
-  100% {
-    transform: rotate(-1deg);
-  }
-}
-
 .button {
   text-align: center;
   background-color: black;
@@ -254,87 +181,54 @@ ul {
 /* Style for the list items */
 li {
   margin: 10px 0; /* Space between list items */
-  padding: 10px;
-  background-color: #ffffff; /* Example background color */
-  border: 1px solid #ddd; /* Example border */
-  border-radius: 5px; /* Rounded corners */
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Example shadow */
-}
-
-#poster-img {
-  box-shadow: 15px 15px 20px 5px rgb(0, 0, 0, 40%);
-  animation: wobble 2s alternate ease-in-out infinite;
-}
-
-@media screen and (max-width:768px) {
-#movie {
-  height:80vh;
-}
-#input {
-  height:130px;
-
-}
-
-#col-container {
-height:20vh;
-margin-top:auto;
-}
-
-#call-to-action {
-  width:120px;
-  margin-right:0;
-}
-
-.logoA {
-  opacity: 0;
-  text-align: center;
-  color: rgb(255, 255, 255);
-  font-family: "Shrikhand", serif;
-  font-weight: 400;
-  font-style: normal;
-  font-size: 12.5vw;
-  text-shadow: rgba(149, 1, 1, 0.893) 5px 5px;
-  margin-top: 8vw;
-  margin-bottom: 0px;
-  line-height: 10vw;
-  animation: logoanim 1s forwards 1s;
-}
-
-.logoB {
-  opacity: 0;
-  margin-top: 10px;
-  text-align: center;
+  padding: 5px;
+  background-color: gray;
   color: white;
-  font-family: "Oswald", serif;
-  font-weight: 400;
-  font-style: normal;
-  font-size: 12.9vw;
-  text-shadow: rgba(149, 1, 1, 0.893) 5px 5px;
-  letter-spacing: 0.5vw;
-  margin-bottom: 0px;
-  line-height: 5vw;
-  animation: logoanim 1s forwards 1s;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.logo-top {
-  text-align: center;
-  padding: 8px;
-  
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 150px;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
 }
 
-.logo-bottom {
-  opacity: 0;
-  text-align: center;
-  width: 60vw;
-  height: 12vw;
-  animation: logoanim 1s forwards 1s;
+.modal-content {
+  background-color: black; /*#fefefe;*/
+  margin: 15% auto;
+  padding: 10px;
+  border: 1px solid #888;
+  width: 70%;
 }
 
-.is-size-4 {
-  font-family: "Oswald", serif;
-  font-weight: 400;
-  font-style: normal;
-  font-size:1rem !important;
+.close {
+  color: black; /* #aaa;*/
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
 }
 
+.close:hover,
+.close:focus {
+  color: red;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 768px) {
+  #movie {
+    height: 700px;
+  }
+  #input {
+    height: 100px;
+  }
 }
