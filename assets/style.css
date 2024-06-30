@@ -159,10 +159,15 @@ p {
 
 #results-text {
   color:red;
-  font-family: "Shrikhand", serif;
+  /* font-family: "Shrikhand", serif; */
+  font-family: "Oswald", serif;
   font-weight: 400;
   font-style: normal;
-  font-size: 6vw;
+  font-size: 4vw;
+}
+
+#poppedResults h1 {
+  color:red;
 }
 
 .page.in {
@@ -264,6 +269,12 @@ li {
 #poster-img {
   box-shadow: 15px 15px 20px 5px rgb(0, 0, 0, 40%);
   animation: wobble 2s alternate ease-in-out infinite;
+}
+
+.modal-card-body div {
+  font-family: "Oswald", serif;
+  font-weight: 400;
+  font-style: normal;
 }
 
 @media screen and (max-width:768px) {
