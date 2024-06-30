@@ -10,6 +10,7 @@ let playerValue;
 
 const playerGuessedScore = document.getElementById("player-guessed-score");
 const playerAccuracyEl = document.getElementById("player-accuracy");
+const actualRTScore = document.getElementById("actual-rt-score");
 const ptsEarnedEl = document.getElementById("points-earned");
 
 const nextRoundBtn = document.getElementById("next-round");
@@ -146,6 +147,7 @@ const guessCheck = function () {
 
 // TODO: I suggest this function also being the place to add our API fetch requests to populate the Movie Title, Poster, and Plot Summary from TMDB.
 const nextRoundFunction = function () {
+  playerValueField.value = "";
   if (roundCount !== 10) {
     roundCount++;
     let rPg = Math.floor(Math.random()*300);
@@ -242,13 +244,16 @@ const restartGame = function () {
 
   // let accuracy = 1 - (Math.abs(`${RTscore}` - guessedScore))/100;
   let accuracy = 1 - (Math.abs(100 - playerValue))/100;
-  let accuracyShow = accuracy * 100 + "%";
+  let accuracyShow = Math.round(accuracy * 100) + "%";
   let weightedAccuracy = Math.pow(accuracy, 2);
-  let maxPoints = 50;
+  let maxPoints = 30;
 
   let earnedPoints = Math.round(maxPoints * weightedAccuracy);
   playerAccuracyEl.innerText = accuracyShow;
   ptsEarnedEl.innerText = earnedPoints;
+  playerGuessedScore.innerText = playerValue;
+  actualRTScore.innerText = 100;
+  // actualRTScore.innerText = ${RTscore};
 
   return [accuracy, earnedPoints];
 }
@@ -291,7 +296,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Add a click event on various child elements to close the parent modal
-  (document.querySelectorAll('.modal-background, .modal-close, .modal-card-head .delete, .modal-card-foot .button') || []).forEach(($close) => {
+  (document.querySelectorAll('.modal-close, .modal-card-head .delete, .modal-card-foot .button') || []).forEach(($close) => {
     const $target = $close.closest('.modal');
 
     $close.addEventListener('click', () => {
@@ -301,7 +306,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Add a keyboard event to close all modals
   document.addEventListener('keydown', (event) => {
-    if(event.key === "Escape") {
+    if(event.key === "") {
       closeAllModals();
     }
   });
