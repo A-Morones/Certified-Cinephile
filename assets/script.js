@@ -105,7 +105,7 @@ const gameStart = function () {
           posterFlipped = true;
           }
           else if (posterFlipped === true) { moviePoster.innerHTML = `<img id="poster-img" src="https://image.tmdb.org/t/p/w500${movie.results[rMI].poster_path}" alt="${movie.results
-          [rMI].title} Poster" width="350em">`;
+          [rMI].title} Poster" width="380em">`;
           posterFlipped = false;
           }
         }
@@ -194,7 +194,7 @@ const nextRoundFunction = function () {
           }
 
           else if (posterFlipped === true) { moviePoster.innerHTML = `<img id="poster-img" src="https://image.tmdb.org/t/p/w500${movie.results[rMI].poster_path}" alt="${movie.results
-          [rMI].title} Poster" width="350em">`;
+          [rMI].title} Poster" width="380em">`;
           posterFlipped = false;
           }
         }
@@ -215,7 +215,7 @@ const nextRoundFunction = function () {
     document.getElementById("movie-poster").removeChild(document.getElementById("poppedMoviePoster"));
 
     gamePage.setAttribute("class", "page out-right");
-    setInterval(resultsPage.setAttribute("class", "page load"), 500);
+    resultsPage.setAttribute("class", "page load");
     resultsPage.setAttribute("class", "page in-left");
   }
 };
@@ -223,7 +223,7 @@ const nextRoundFunction = function () {
 const restartGame = function () {
   roundCount = 1;
   resultsPage.setAttribute("class", "page out-left");
-  setInterval(landingPage.setAttribute("class", "page load"), 500);
+  landingPage.setAttribute("class", "page load");
   landingPage.setAttribute("class", "page in-left");
 };
 

@@ -90,10 +90,10 @@
   </main>
   <main id="game-page" class="columns is-desktop page out-right">
 
-    <div class="columns m-0">
+    <div id="col-container" class="columns m-0">
       <div id="movie" class="column px-6 is-full-mobile is-two-thirds-tablet is-two-thirds-desktop">
         <progress class="progress mt-3 mb-2 is-small" value="10" max="100" id="round-display"></progress>
-        <p class ="title my-1 is-size-6" id="movie-title"></p>
+        <p class ="title my-3 is-size-5" id="movie-title"></p>
         <p id="movie-poster"></p>
         <p id="movie-summary"></p>
       </div>
@@ -121,12 +121,12 @@
           </div>
         </div>
 
-        <div class="column columns is-multiline">
-          <p id="call-to-action" style="height:100px;" class="mb-0 is-size-6 column is-half-desktop is-offset-one-quarter">Guess the Rotten Tomatoes score!</p>
-          <input class="column is-narrow-mobile is-half-desktop is-offset-one-quarter"></input>
-          <button id="guess" class="js-modal-trigger column button is-primary is-outlined is-rounded is-half-desktop is-offset-one-quarter" data-target="player-input">
+        <div class="column columns is-mobile is-multiline is-vcentered is-centered">
+          <div id="call-to-action" style="height:100px;" class="mb-0 is-size-4 column is-one-third-mobile is-two-thirds-tablet is-two-thirds-desktop is-offset-one-sixth-tablet is-offset-one-sixth-desktop">Guess the Rotten Tomatoes score!</div>
+          <input class="input is-rounded is-large column is-one-third-mobile is-two-thirds-tablet is-two-thirds-desktop is-offset-one-sixth-tablet is-offset-one-sixth-desktop" placeholder="1 - 100"></input>
+          <button id="guess" class="js-modal-trigger column button is-primary is-outlined is-rounded  is-one-fifth-mobile is-two-thirds-tablet is-two-thirds-desktop is-offset-one-sixth-tablet is-offset-one-sixth-desktop" data-target="player-input">
             <span class="icon is-large">
-            <i class="fa-solid fa-circle-check" style="color: #63E6BE;"></i>
+              <i class="fa-solid fa-circle-check fa-2xl" style="color: #63E6BE;"></i>
             </span>
           </button>
         </div>
