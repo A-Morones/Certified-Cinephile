@@ -297,43 +297,55 @@ const restartGame = function () {
 
 //const checkScore = function(RTscore) {
 const checkScore = function() {
-  let playerValue = playerValueField.value;
-  // let accuracy = 1 - (Math.abs(`${RTscore}` - guessedScore))/100;
-  let accuracy = 1 - (Math.abs(100 - playerValue))/100;
-  let accuracyShow = Math.round(accuracy * 100) + "%";
-  let weightedAccuracy = Math.pow(accuracy, 3);
-  let maxPoints = 20;
-  let earnedPoints = Math.round(maxPoints * weightedAccuracy);
-
-  roundAccuracy.push(accuracy);
-  playerAccuracyEl.innerText = accuracyShow;
-  playerGuessedScore.innerText = playerValue;
-  actualRTScore.innerText = 100;
-  // actualRTScore.innerText = ${RTscore};
-
+  fetch(`https://www.omdbapi.com/?apikey=1053f97f&t=${document.getElementById("poppedMovieTitle").textContent}`)
+          .then(function(response) {
+            console.log(response.json);
+            return response.json();
+          })
+          .then(function(omdb){
+            console.log(omdb);
+            console.log(parseInt(omdb.Ratings[1].Value));
+            let RTscore = parseInt(omdb.Ratings[1].Value);
+            let playerValue = playerValueField.value;
+            // let accuracy = 1 - (Math.abs(`${RTscore}` - guessedScore))/100;
+            let accuracy = 1 - (Math.abs(RTscore - playerValue))/100;
+            let accuracyShow = Math.round(accuracy * 100) + "%";
+            let weightedAccuracy = Math.pow(accuracy, 3);
+            let maxPoints = 20;
+            let earnedPoints = Math.round(maxPoints * weightedAccuracy);
+          
+            roundAccuracy.push(accuracy);
+            playerAccuracyEl.innerText = accuracyShow;
+            playerGuessedScore.innerText = playerValue;
+            actualRTScore.innerText = RTscore;
+            // actualRTScore.innerText = ${RTscore};
+          
+            
+            if (accuracy === 1 && prevGuessPerfect === true) {
+              streak++;
+              ptsEarnedEl.setAttribute("class", "is-size-3 has-text-warning has-text-bold column is-half mt-0 pt-0 has-text-centered")
+              }
+              else if (accuracy === 1) {
+                prevGuessPerfect = true;
+                ptsEarnedEl.setAttribute("class", "is-size-3 has-text-primary has-text-bold column is-half mt-0 pt-0 has-text-centered")
+              } else {
+              prevGuessPerfect = false;
+              streak = 1;
+              ptsEarnedEl.setAttribute("class", "is-size-3 has-text-primary has-text-bold column is-half mt-0 pt-0 has-text-centered")
+            }
+          
+            earnedPoints = earnedPoints * streak;
+            playerScore = playerScore + earnedPoints;
+            ptsEarnedEl.innerText = earnedPoints;
+          
+            localStorage.setItem("score", JSON.stringify(playerScore));
+            localStorage.setItem("accuracy", JSON.stringify(accuracy));
+            console.log(roundAccuracy);
+            return [accuracy, earnedPoints];
+          })
+          }
   
-  if (accuracy === 1 && prevGuessPerfect === true) {
-    streak++;
-    ptsEarnedEl.setAttribute("class", "is-size-3 has-text-warning has-text-bold column is-half mt-0 pt-0 has-text-centered")
-    }
-    else if (accuracy === 1) {
-      prevGuessPerfect = true;
-      ptsEarnedEl.setAttribute("class", "is-size-3 has-text-primary has-text-bold column is-half mt-0 pt-0 has-text-centered")
-    } else {
-    prevGuessPerfect = false;
-    streak = 1;
-    ptsEarnedEl.setAttribute("class", "is-size-3 has-text-primary has-text-bold column is-half mt-0 pt-0 has-text-centered")
-  }
 
-  earnedPoints = earnedPoints * streak;
-  playerScore = playerScore + earnedPoints;
-  ptsEarnedEl.innerText = earnedPoints;
-
-  localStorage.setItem("score", JSON.stringify(playerScore));
-  localStorage.setItem("accuracy", JSON.stringify(accuracy));
-  console.log(roundAccuracy);
-  return [accuracy, earnedPoints];
-}
 
 
 
@@ -398,3 +410,4 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
+
