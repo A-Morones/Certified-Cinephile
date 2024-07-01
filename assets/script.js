@@ -23,34 +23,33 @@ const playAgain = document.getElementById("play-again");
 
 // Initialize game state as Round 1.
 let roundCount = 1;
+let roundAccuracy = [];
 let playerScore = 0;
 let streak = 1;
 let prevGuessPerfect = false;
 
+let playerName;
 let players = JSON.parse(localStorage.getItem("playersData"));
 if (players === null) {
   players = [];
 }
 
-function Player(name, hiscore, accuracy) {
+function Player(name, scores, accuracy, avgAccuracy, hiScore) {
+
     this.name = 'name';
     this.scores = [];
-    this.hiscore = findHiscore(scores);
     this.accuracy = [];
-    this.avgaccuracy = findAccuracyAvg(accuracy);
-    accuracy.length
-
-    const findAccuracyAvg = function(accuracy) {
-    let accuracyTally;
-    for (let i = 0; i<accuracy.length; i++) {
-      accuracyTally = accuracyTally + accuracy[i]
+    this.hiscore = function() {
+      let accuracyTally;
+      for (let i = 0; i<this.accuracy.length; i++) {
+        accuracyTally = accuracyTally + this.accuracy[i];
+      }
+      avgAccuracy = accuracyTally/accuracy.length;
+      return avgAccuracy;
     }
-    avgAccuracy = accuracyTally/accuracy.length;
-    return avgAccuracy;
-  }
-    const findHiscore = function(scores) {
-      hiscore = Math.max(...scores);
-      return hiscore;
+    this.avgAccuracy = function() {
+      hiScore = Math.max(...this.scores);
+      return hiScore;
     }
 }
 
@@ -92,6 +91,16 @@ const logStoredPlayers = function () {
 
 // This function begins when Start Game button on Landing Page is pressed.
 const gameStart = function () {
+  playerName = addPlayerBtn.value;
+  if (!players.includes(playerName)) {
+    p1 = new Player();
+    p1.name = playerName;
+    players.push(p1);
+    localStorage.setItem("playersData", JSON.stringify(players));
+  } else if (players.includes(playerName)) {p1 = players[players.findIndex(playerName)];
+    console.log(p1);    
+  }
+
   roundDisplay.value = roundCount*10;
   let rPg = Math.floor(Math.random()*300);
 
@@ -133,7 +142,6 @@ const gameStart = function () {
 
         let posterFlipped = false;
         let flipsides = function () {
-          console.log(posterFlipped);
           if (posterFlipped === false) {
 
           moviePoster.innerHTML =`<div id="poster-img" style="background-color:rgb(32, 32, 33); width:330px; height:495px;"><p class="is-size-5 p-2 has-text-left">${movie.results[rMI].overview}</p></div>`;
@@ -163,15 +171,9 @@ const gameStart = function () {
   setTimeout(gamePage.setAttribute("class", "page in-right"), 500);
 };
 
-// TODO: I started to put together a function to call when checking score player enters versus their guessed score. It is incomplete. This would probably be a good place to have API fetch request to pull Rotten Tomatoes scores from OMDB.
-const guessCheck = function () {
-  if (guessedScore === actualScore) {
-  }
-};
 
 // This function is called when the Submit button on the Gameplay screen is pressed. It will increment the current 'Round' up to 10. After Round 10 the final round it will transition to the Game Results screen, which would be the final screen. WIP.
 
-// TODO: I suggest this function also being the place to add our API fetch requests to populate the Movie Title, Poster, and Plot Summary from TMDB.
 const nextRoundFunction = function () {
   playerValueField.value = "";
   if (roundCount !== 10) {
@@ -244,40 +246,53 @@ const nextRoundFunction = function () {
     roundDisplay.value = roundCount*10;
 
   } else if (roundCount === 10) {
-
+// Clear game screen of title and poster
     document.getElementById("movie-title").removeChild(document.getElementById("poppedMovieTitle"));
-    
     document.getElementById("movie-poster").removeChild(document.getElementById("poppedMoviePoster"));
-
+// Transition from game screen to results screen
     gamePage.setAttribute("class", "page out-right");
     resultsPage.setAttribute("class", "page load");
     resultsPage.setAttribute("class", "page in-left");
-
+    let tallyAccuracy = 0;
+    for (let i=0; i<roundAccuracy.length; i++) {
+      tallyAccuracy = tallyAccuracy + roundAccuracy[i];
+    } let sessAvgAcc = tallyAccuracy/roundAccuracy.length;
+    console.log(`This session's accuracy avg.: ${sessAvgAcc}`);
+    function checkPName() {
+      return p1.name === playerName;
+    }
+    pi = players.findIndex(checkPName);
+console.log(pi);
+    p1.accuracy.push(sessAvgAcc);
     sessScore = JSON.parse(localStorage.getItem("score"));
+    p1.scores.push(sessScore);
+
     sessAcc = JSON.parse(localStorage.getItem("accuracy"));
     if (sessScore >= 100) {
       sessResults = document.createElement("div");
       sessResults.setAttribute("id", "poppedResults")
       displayResults.appendChild(sessResults);
-      sessResults.innerHTML = `<h1 class="is-size-3">Congratulations!</h1><h1>You are indeed a Certified Cinephile!</h1> <h1 class="mb-4">Final Score: ${sessScore}</h1>`;
+      sessResults.innerHTML = `<h1 class="is-size-3">Congratulations!</h1><h1 class="is-size-4">You are indeed a Certified Cinephile!</h1> <h1 class="mb-4 is-size-4">Final Score: ${sessScore}</h1>`;
     } else {
       sessResults = document.createElement("div");
       sessResults.setAttribute("id", "poppedResults")
       displayResults.appendChild(sessResults);
-      sessResults.innerHTML = `<h1 class="mb-4">You scored ${sessScore} ! Try again!</h1>`;
+      sessResults.innerHTML = `<h1 class="mb-4 is-size-4">You scored ${sessScore} ! Try again!</h1>`;
     }
   }
 };
 
 const restartGame = function () {
   roundCount = 1;
+  roundAccuracy = [];
   playerScore = 0;
   streak = 1;
+  prevGuessPerfect = false;
   resultsPage.setAttribute("class", "page out-left");
   landingPage.setAttribute("class", "page load");
   landingPage.setAttribute("class", "page in-left");
   displayResults.removeChild(sessResults);
-
+  players = JSON.parse(localStorage.getItem("playersData"));
 };
 
 //const checkScore = function(RTscore) {
@@ -290,6 +305,7 @@ const checkScore = function() {
   let maxPoints = 20;
   let earnedPoints = Math.round(maxPoints * weightedAccuracy);
 
+  roundAccuracy.push(accuracy);
   playerAccuracyEl.innerText = accuracyShow;
   playerGuessedScore.innerText = playerValue;
   actualRTScore.innerText = 100;
@@ -313,43 +329,22 @@ const checkScore = function() {
   playerScore = playerScore + earnedPoints;
   ptsEarnedEl.innerText = earnedPoints;
 
-
   localStorage.setItem("score", JSON.stringify(playerScore));
   localStorage.setItem("accuracy", JSON.stringify(accuracy));
-
+  console.log(roundAccuracy);
   return [accuracy, earnedPoints];
 }
 
 
 
 
-
-
-
-
-
-
-
 // Event listeners below. The names should be helpful in discerning which is which.
-addPlayerBtn.addEventListener("click", trackPlayersData);
+// addPlayerBtn.addEventListener("click", trackPlayersData);
 startBtn.addEventListener("click", gameStart);
 guessBtn.addEventListener("click", checkScore);
 nextRoundBtn.addEventListener("click", nextRoundFunction);
 playAgain.addEventListener("click", restartGame);
 
-
-
-
-
-  
-
-  // When the user clicks on <span> (x), close the modal
-  span.onclick = function () {
-    modal.style.display = "none";
-    addPlayerBtn.disabled = false;
-  };
-
-});
 
 // Bulma Modal Event Listener: https://bulma.io/documentation/components/modal/
 document.addEventListener('DOMContentLoaded', () => {
@@ -382,7 +377,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   (
     document.querySelectorAll(
-      ".modal-background, .modal-close, .modal-card-head .delete, .modal-card-foot .button"
+      ".modal-close, .modal-card-head .delete, .modal-card-foot .button"
     ) || []
   ).forEach(($close) => {
     const $target = $close.closest(".modal");
