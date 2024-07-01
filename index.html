@@ -3,7 +3,6 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Certified Cinephile</title>
     <link rel="stylesheet" type="text/css" href="./assets/style.css" />
     <script
       src="https://code.jquery.com/jquery-3.5.1.min.js"
@@ -35,6 +34,7 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" type="text/css" href="./assets/style.css" />
+
     <script>
       src = "https://code.jquery.com/jquery-3.5.1.min.js";
       integrity = "sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=";
@@ -43,6 +43,7 @@
   </head>
   <body class="min-100-vh flex-column">
     <main id="landing" class="page">
+
       <header class="p-5 text-center text-white bg-primary">
         <div class="logo-container">
           <div class="logo-top">
@@ -101,35 +102,67 @@
         </div>
       </div>
     </main>
-    <main id="game-page" class="columns is-desktop page out">
-      <div class="columns">
-        <div
-          id="movie"
-          class="column is-full-mobile is-half-tablet is-half-desktop"
-        >
-          <p class="title is-size-4" id="round-display"></p>
-          <p id="movie-title"></p>
-          <p id="movie-poster"></p>
-          <p id="movie-summary"></p>
-        </div>
-        <div
-          id="input"
-          class="column is-full-mobile is-half-tablet is-half-desktop"
-        >
-          <p>Player Input</p>
-          <div></div>
-          <div></div>
-          <button id="guess" class="button">Submit</button>
-        </div>
+   
+
+
+
+  <main id="game-page" class="columns is-desktop page out-right">
+
+    <div id="col-container" class="columns m-0">
+      <div id="movie" class="column px-6 is-full-mobile is-two-thirds-tablet is-two-thirds-desktop">
+        <progress class="progress mt-3 mb-2 is-small" value="10" max="100" id="round-display"></progress>
+        <p class ="title my-3 is-size-5" id="movie-title"></p>
+        <p id="movie-poster"></p>
+        <p id="movie-summary"></p>
       </div>
-    </main>
-    <main id="results-page" class="page out">
-      <aside id="results">
-        <p>You Won or Lost!</p>
+
+      <div id="input" class="column is-full-mobile is-one-thirds-tablet is-one-fourths-desktop columns">
+
+        <div id="player-input" class="modal">
+          <div class="modal-background"></div>
+          <div class="modal-card">
+            <section class="modal-card-body">
+              <div class="content columns is-mobile is-multiline">
+                <div id="" class="column is-half mb-0 pb-0 has-text-centered">Your guess</div>
+                <div id="" class="column is-half mb-0 pb-0 has-text-centered">Actual</div>
+                <div id="player-guessed-score" class="is-size-3 has-text-bold column is-half mt-0 pt-0 has-text-centered"></div>
+                <div id="actual-rt-score" class="is-size-3 has-text-bold column is-half mt-0 pt-0 has-text-centered"></div>
+                <div id="" class="column is-half mb-0 pb-0 has-text-centered">Accuracy</div>
+                <div id="" class="column is-half mb-0 pb-0 has-text-centered">Points earned</div>
+                <div id="player-accuracy" class="is-size-3 has-text-bold column is-half mt-0 pt-0 has-text-centered"></div>
+                <div id="points-earned" class="is-size-3 has-text-primary has-text-bold column is-half mt-0 pt-0 has-text-centered"></div>
+              </div>
+            </section>
+            <footer class="modal-card-foot">
+              <div class="buttons columns is-mobile is-centered">
+                <button id="next-round" class="button is-full is-rounded is-success column" aria-label="Next Round">Next Round</button>
+              </div>
+            </footer>
+          </div>
+        </div>
+
+        <div class="column columns is-mobile is-multiline is-vcentered is-centered">
+          <div id="call-to-action" style="height:100px;" class="mb-0 is-size-4 column is-one-third-mobile is-two-thirds-tablet is-two-thirds-desktop is-offset-one-sixth-tablet is-offset-one-sixth-desktop">Guess the Rotten Tomatoes score!</div>
+          <input type="number" max="100" min="1" id="player-RT-guess-field" class="input is-rounded is-large column is-one-third-mobile is-two-thirds-tablet is-two-thirds-desktop is-offset-one-sixth-tablet is-offset-one-sixth-desktop" placeholder="1 - 100"></input>
+          <button id="guess" class="js-modal-trigger column button is-primary is-outlined is-rounded  is-one-fifth-mobile is-two-thirds-tablet is-two-thirds-desktop is-offset-one-sixth-tablet is-offset-one-sixth-desktop" data-target="player-input">
+            <span class="icon is-large">
+              <i class="fa-solid fa-circle-check fa-2xl" style="color: #63E6BE;"></i>
+            </span>
+          </button>
+        </div>
+      
+      </div>
+    </div>
+  </main>
+  <main id="results-page" class="page out-left">
+    <aside id="results" class="columns mt-6 is-mobile is-multiline is-centered">
+        <h1 id="results-text" class="column is-full mt-2">Let's see how you did ...</h1>
+        <div id="populate-results" class="column is-full"></div>
         <button id="play-again" class="button">Play Again?</button>
-      </aside>
-    </main>
-    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+  <script src="https://kit.fontawesome.com/2659513f6a.js" crossorigin="anonymous"></script>
+
     <script src="./assets/script.js"></script>
   </body>
 </html>

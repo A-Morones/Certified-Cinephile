@@ -5,17 +5,53 @@ const startBtn = document.getElementById("start-game-btn");
 const gamePage = document.getElementById("game-page");
 const guessBtn = document.getElementById("guess");
 
+const playerValueField = document.getElementById("player-RT-guess-field");
+let playerValue;
+
+const playerGuessedScore = document.getElementById("player-guessed-score");
+const playerAccuracyEl = document.getElementById("player-accuracy");
+const actualRTScore = document.getElementById("actual-rt-score");
+const ptsEarnedEl = document.getElementById("points-earned");
+
+const nextRoundBtn = document.getElementById("next-round");
+
 const resultsPage = document.getElementById("results-page");
+const displayResults = document.getElementById("populate-results");
 const roundDisplay = document.getElementById("round-display");
 
 const playAgain = document.getElementById("play-again");
 
 // Initialize game state as Round 1.
 let roundCount = 1;
+let playerScore = 0;
+let streak = 1;
+let prevGuessPerfect = false;
 
 let players = JSON.parse(localStorage.getItem("playersData"));
 if (players === null) {
   players = [];
+}
+
+function Player(name, hiscore, accuracy) {
+    this.name = 'name';
+    this.scores = [];
+    this.hiscore = findHiscore(scores);
+    this.accuracy = [];
+    this.avgaccuracy = findAccuracyAvg(accuracy);
+    accuracy.length
+
+    const findAccuracyAvg = function(accuracy) {
+    let accuracyTally;
+    for (let i = 0; i<accuracy.length; i++) {
+      accuracyTally = accuracyTally + accuracy[i]
+    }
+    avgAccuracy = accuracyTally/accuracy.length;
+    return avgAccuracy;
+  }
+    const findHiscore = function(scores) {
+      hiscore = Math.max(...scores);
+      return hiscore;
+    }
 }
 
 const API_KEY = "3306c7ffcda8121e53d4fb1e95e8750c";
@@ -56,8 +92,8 @@ const logStoredPlayers = function () {
 
 // This function begins when Start Game button on Landing Page is pressed.
 const gameStart = function () {
-  roundDisplay.innerHTML = `Round:${roundCount}/10`;
-  let rPg = Math.floor(Math.random() * 300);
+  roundDisplay.value = roundCount*10;
+  let rPg = Math.floor(Math.random()*300);
 
   // Fetch a random now-playing movie from TMDB API
   const options = {
@@ -70,40 +106,53 @@ const gameStart = function () {
   };
 
   fetch(
-    `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=true&language=en-US&page=${rPg}&sort_by=popularity.desc&with_original_language=en&&release_date.lte=${dayjs().format(
-      "MM-DD-YYYY"
-    )}&api_key=${API_KEY}`,
+    `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=true&language=en-US&page=${rPg}&sort_by=popularity.desc&with_original_language=en&&release_date.lte=${dayjs().format('MM-DD-YYYY')}&api_key=${API_KEY}`,
     options
   )
     .then((response) => response.json())
     .then(function (movie) {
-      console.log(movie);
-      rMI = Math.floor(Math.random() * 10);
+      // console.log(movie);
+
+      rMI = Math.floor(Math.random() * 20);
       movieTitle = document.createElement("div");
       movieTitle.setAttribute("id", "poppedMovieTitle");
       movieTitle.innerHTML = `${movie.results[rMI].title}`;
-      if (document.getElementById("movie-title").childElementCount !== 0) {
-        document
-          .getElementById("movie-title")
-          .removeChild(document.getElementById("poppedMovieTitle"));
-      }
-      document.getElementById("movie-title").appendChild(movieTitle);
-      console.log(document.getElementById("movie-title").children[0]);
+      if (document.getElementById("movie-title").childElementCount !== 0)
+        {
+          document.getElementById("movie-title").removeChild(document.getElementById("poppedMovieTitle"));
+        }
+        document.getElementById("movie-title").appendChild(movieTitle);
 
-      moviePoster = document.createElement("div");
 
-      moviePoster.innerHTML = `<img src="https://image.tmdb.org/t/p/w500${movie.results[rMI].poster_path}" alt="${movie.results[rMI].title} Poster" width="350em">`;
-      moviePoster.setAttribute("id", "poppedMoviePoster");
+        moviePoster = document.createElement("div");
+        
+        moviePoster.innerHTML = `<img id="poster-img" src="https://image.tmdb.org/t/p/w500${movie.results[rMI].poster_path}" alt="${movie.results
+        [rMI].title} Poster" width="330em">`;
+        moviePoster.setAttribute("id", "poppedMoviePoster");
+        moviePoster.setAttribute("class", "pt-3 columns is-mobile is-centered");
 
-      if (document.getElementById("movie-poster").childElementCount !== 0) {
-        document
-          .getElementById("movie-poster")
-          .removeChild(document.getElementById("poppedMoviePoster"));
-      }
-      document.getElementById("movie-poster").appendChild(moviePoster);
+        let posterFlipped = false;
+        let flipsides = function () {
+          console.log(posterFlipped);
+          if (posterFlipped === false) {
 
-      // .innerHTML = `<img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title} Poster">`;
-      // document.getElementById('movie-summary').textContent = `Summary: ${movie.overview}`;
+          moviePoster.innerHTML =`<div id="poster-img" style="background-color:rgb(32, 32, 33); width:330px; height:495px;"><p class="is-size-5 p-2 has-text-left">${movie.results[rMI].overview}</p></div>`;
+          posterFlipped = true;
+          }
+          else if (posterFlipped === true) { moviePoster.innerHTML = `<img id="poster-img" src="https://image.tmdb.org/t/p/w500${movie.results[rMI].poster_path}" alt="${movie.results
+          [rMI].title} Poster" width="330em">`;
+          posterFlipped = false;
+          }
+        }
+        moviePoster.addEventListener("click", flipsides);
+
+        if (document.getElementById("movie-poster").childElementCount !== 0)
+        {
+          document.getElementById("movie-poster").removeChild(document.getElementById("poppedMoviePoster"));
+        }
+        document.getElementById("movie-poster").appendChild(moviePoster);
+        // console.log(document.getElementById("movie-poster").getBoundingClientRect());
+
     })
     .catch((err) => console.error(err));
 
@@ -111,7 +160,7 @@ const gameStart = function () {
   // It applies CSS classes that effectively slide the current containers off screen to be replaced by the next screen.
   landingPage.setAttribute("class", "page out");
   setTimeout(gamePage.setAttribute("class", "page load"), 500);
-  setTimeout(gamePage.setAttribute("class", "page in"), 500);
+  setTimeout(gamePage.setAttribute("class", "page in-right"), 500);
 };
 
 // TODO: I started to put together a function to call when checking score player enters versus their guessed score. It is incomplete. This would probably be a good place to have API fetch request to pull Rotten Tomatoes scores from OMDB.
@@ -123,10 +172,11 @@ const guessCheck = function () {
 // This function is called when the Submit button on the Gameplay screen is pressed. It will increment the current 'Round' up to 10. After Round 10 the final round it will transition to the Game Results screen, which would be the final screen. WIP.
 
 // TODO: I suggest this function also being the place to add our API fetch requests to populate the Movie Title, Poster, and Plot Summary from TMDB.
-const gameResults = function () {
+const nextRoundFunction = function () {
+  playerValueField.value = "";
   if (roundCount !== 10) {
     roundCount++;
-    let rPg = Math.floor(Math.random() * 300);
+    let rPg = Math.floor(Math.random()*300);
 
     const options = {
       method: "GET",
@@ -138,9 +188,7 @@ const gameResults = function () {
     };
 
     fetch(
-      `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=true&language=en-US&page=${rPg}&sort_by=popularity.desc&with_original_language=en&&release_date.lte=${dayjs().format(
-        "MM-DD-YYYY"
-      )}&api_key=${API_KEY}`,
+      `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=true&language=en-US&page=${rPg}&sort_by=popularity.desc&with_original_language=en&&release_date.lte=${dayjs().format('MM-DD-YYYY')}&api_key=${API_KEY}`,
       options
     )
       .then((response) => response.json())
@@ -149,126 +197,189 @@ const gameResults = function () {
         rMI = Math.floor(Math.random() * 20);
         movieTitle = document.createElement("div");
         movieTitle.setAttribute("id", "poppedMovieTitle");
+
         movieTitle.innerHTML = `${movie.results[rMI].title}`;
-        if (document.getElementById("movie-title").childElementCount !== 0) {
-          document
-            .getElementById("movie-title")
-            .removeChild(document.getElementById("poppedMovieTitle"));
+
+        if (document.getElementById("movie-title").childElementCount !== 0)
+        {
+          document.getElementById("movie-title").removeChild(document.getElementById("poppedMovieTitle"));
         }
         document.getElementById("movie-title").appendChild(movieTitle);
-        console.log(document.getElementById("movie-title").children[0]);
+
 
         // document.getElementById('movie-title').textContent = movie.title;
 
         moviePoster = document.createElement("div");
-
-        moviePoster.innerHTML = `<img src="https://image.tmdb.org/t/p/w500${movie.results[rMI].poster_path}" alt="${movie.results[rMI].title} Poster" width="350em">`;
+        moviePoster.innerHTML = `<img id="poster-img" src="https://image.tmdb.org/t/p/w500${movie.results[rMI].poster_path}" alt="${movie.results
+        [rMI].title} Poster" width="330em">`;
         moviePoster.setAttribute("id", "poppedMoviePoster");
+        moviePoster.setAttribute("class", "pt-3 columns is-mobile is-centered");
+        
 
-        if (document.getElementById("movie-poster").childElementCount !== 0) {
-          document
-            .getElementById("movie-poster")
-            .removeChild(document.getElementById("poppedMoviePoster"));
+        if (document.getElementById("movie-poster").childElementCount !== 0)
+        {
+          document.getElementById("movie-poster").removeChild(document.getElementById("poppedMoviePoster"));
         }
         document.getElementById("movie-poster").appendChild(moviePoster);
+        let posterFlipped = false;
+        let flipsides = function (event) {
+          if (posterFlipped === false) {
+          moviePoster.innerHTML =`<div id="poster-img" style="background-color:rgb(32, 32, 33); width:330px; height:495px;"><p class="is-size-5 p-2 has-text-left">${movie.results[rMI].overview}</p></div`;
+          posterFlipped = true;
+          }
 
-        // .innerHTML = `<img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title} Poster">`;
-        // document.getElementById('movie-summary').textContent = `Summary: ${movie.overview}`;
+          else if (posterFlipped === true) { moviePoster.innerHTML = `<img id="poster-img" src="https://image.tmdb.org/t/p/w500${movie.results[rMI].poster_path}" alt="${movie.results
+          [rMI].title} Poster" width="330em">`;
+          posterFlipped = false;
+          }
+        }
+        moviePoster.addEventListener("click", flipsides);
+
+
+        // console.log(document.getElementById("movie-poster").getBoundingClientRect());
+
       })
       .catch((err) => console.error(err));
 
-    roundDisplay.innerHTML = `Round:${roundCount}/10`;
+    roundDisplay.value = roundCount*10;
+
   } else if (roundCount === 10) {
-    document
-      .getElementById("movie-title")
-      .removeChild(document.getElementById("poppedMovieTitle"));
 
-    document
-      .getElementById("movie-poster")
-      .removeChild(document.getElementById("poppedMoviePoster"));
+    document.getElementById("movie-title").removeChild(document.getElementById("poppedMovieTitle"));
+    
+    document.getElementById("movie-poster").removeChild(document.getElementById("poppedMoviePoster"));
 
-    gamePage.setAttribute("class", "page out");
-    setInterval(resultsPage.setAttribute("class", "page load"), 500);
-    resultsPage.setAttribute("class", "page in");
+    gamePage.setAttribute("class", "page out-right");
+    resultsPage.setAttribute("class", "page load");
+    resultsPage.setAttribute("class", "page in-left");
+
+    sessScore = JSON.parse(localStorage.getItem("score"));
+    sessAcc = JSON.parse(localStorage.getItem("accuracy"));
+    if (sessScore >= 100) {
+      sessResults = document.createElement("div");
+      sessResults.setAttribute("id", "poppedResults")
+      displayResults.appendChild(sessResults);
+      sessResults.innerHTML = `<h1 class="is-size-3">Congratulations!</h1><h1>You are indeed a Certified Cinephile!</h1> <h1 class="mb-4">Final Score: ${sessScore}</h1>`;
+    } else {
+      sessResults = document.createElement("div");
+      sessResults.setAttribute("id", "poppedResults")
+      displayResults.appendChild(sessResults);
+      sessResults.innerHTML = `<h1 class="mb-4">You scored ${sessScore} ! Try again!</h1>`;
+    }
   }
 };
 
 const restartGame = function () {
   roundCount = 1;
-  resultsPage.setAttribute("class", "page out");
-  setInterval(landingPage.setAttribute("class", "page load"), 500);
-  landingPage.setAttribute("class", "page in");
+  playerScore = 0;
+  streak = 1;
+  resultsPage.setAttribute("class", "page out-left");
+  landingPage.setAttribute("class", "page load");
+  landingPage.setAttribute("class", "page in-left");
+  displayResults.removeChild(sessResults);
+
 };
 
-const checkScore = function (RTscore) {
-  let guessedScore;
-  let accuracy = 1 - Math.abs(`${RTscore}` - guessedScore) / 100;
-  let weightedAccuracy = Math.pow(accuracy, 2);
-  let maxPoints = 50;
-  let earnedPoints = maxPoints * weightedAccuracy;
-  return earnedPoints;
-};
+//const checkScore = function(RTscore) {
+const checkScore = function() {
+  let playerValue = playerValueField.value;
+  // let accuracy = 1 - (Math.abs(`${RTscore}` - guessedScore))/100;
+  let accuracy = 1 - (Math.abs(100 - playerValue))/100;
+  let accuracyShow = Math.round(accuracy * 100) + "%";
+  let weightedAccuracy = Math.pow(accuracy, 3);
+  let maxPoints = 20;
+  let earnedPoints = Math.round(maxPoints * weightedAccuracy);
+
+  playerAccuracyEl.innerText = accuracyShow;
+  playerGuessedScore.innerText = playerValue;
+  actualRTScore.innerText = 100;
+  // actualRTScore.innerText = ${RTscore};
+
+  
+  if (accuracy === 1 && prevGuessPerfect === true) {
+    streak++;
+    ptsEarnedEl.setAttribute("class", "is-size-3 has-text-warning has-text-bold column is-half mt-0 pt-0 has-text-centered")
+    }
+    else if (accuracy === 1) {
+      prevGuessPerfect = true;
+      ptsEarnedEl.setAttribute("class", "is-size-3 has-text-primary has-text-bold column is-half mt-0 pt-0 has-text-centered")
+    } else {
+    prevGuessPerfect = false;
+    streak = 1;
+    ptsEarnedEl.setAttribute("class", "is-size-3 has-text-primary has-text-bold column is-half mt-0 pt-0 has-text-centered")
+  }
+
+  earnedPoints = earnedPoints * streak;
+  playerScore = playerScore + earnedPoints;
+  ptsEarnedEl.innerText = earnedPoints;
+
+
+  localStorage.setItem("score", JSON.stringify(playerScore));
+  localStorage.setItem("accuracy", JSON.stringify(accuracy));
+
+  return [accuracy, earnedPoints];
+}
+
+
+
+
+
+
+
+
+
+
 
 // Event listeners below. The names should be helpful in discerning which is which.
 addPlayerBtn.addEventListener("click", trackPlayersData);
 startBtn.addEventListener("click", gameStart);
-guessBtn.addEventListener("click", gameResults);
+guessBtn.addEventListener("click", checkScore);
+nextRoundBtn.addEventListener("click", nextRoundFunction);
 playAgain.addEventListener("click", restartGame);
 
-document.addEventListener("DOMContentLoaded", function () {
-  // Get the modal
-  const modal = document.getElementById("rulesModal");
 
-  // Get the button that opens the modal
-  const btn = document.getElementById("show-rules-btn");
 
-  // Get the <span> element that closes the modal
-  const span = document.getElementsByClassName("close")[0];
 
-  // When the user clicks the button, open the modal
-  // btn.onclick = function () {
-  //   modal.style.display = "block";
-  // };
+
+  
 
   // When the user clicks on <span> (x), close the modal
   span.onclick = function () {
     modal.style.display = "none";
     addPlayerBtn.disabled = false;
   };
-  // function enableStartGame() {
-  //   if (btn && addPlayerBtn) {
-  //     startBtn.removeAttribute(disabled);
-  //   }
-  // }
+
 });
 
-document.addEventListener("DOMContentLoaded", () => {
+// Bulma Modal Event Listener: https://bulma.io/documentation/components/modal/
+document.addEventListener('DOMContentLoaded', () => {
   // Functions to open and close a modal
   function openModal($el) {
-    $el.classList.add("is-active");
+    $el.classList.add('is-active');
   }
 
   function closeModal($el) {
-    $el.classList.remove("is-active");
+    $el.classList.remove('is-active');
   }
 
   function closeAllModals() {
-    (document.querySelectorAll(".modal") || []).forEach(($modal) => {
+    (document.querySelectorAll('.modal') || []).forEach(($modal) => {
       closeModal($modal);
     });
   }
 
-  // Add a click event on buttons to open a specific modal
-  (document.querySelectorAll(".js-modal-trigger") || []).forEach(($trigger) => {
+  
+  (document.querySelectorAll('.js-modal-trigger') || []).forEach(($trigger) => {
     const modal = $trigger.dataset.target;
     const $target = document.getElementById(modal);
 
-    $trigger.addEventListener("click", () => {
+    $trigger.addEventListener('click', () => {
       openModal($target);
     });
   });
 
   // Add a click event on various child elements to close the parent modal
+
   (
     document.querySelectorAll(
       ".modal-background, .modal-close, .modal-card-head .delete, .modal-card-foot .button"
@@ -277,13 +388,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const $target = $close.closest(".modal");
 
     $close.addEventListener("click", () => {
+
       closeModal($target);
     });
   });
 
   // Add a keyboard event to close all modals
-  document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") {
+
+
+  document.addEventListener('keydown', (event) => {
+    if(event.key === "") {
+
       closeAllModals();
     }
   });
