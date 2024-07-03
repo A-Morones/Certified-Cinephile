@@ -8,6 +8,8 @@ const guessBtn = document.getElementById("guess");
 const playerValueField = document.getElementById("player-RT-guess-field");
 let playerValue;
 
+const playerHUD = document.getElementById("call-to-action");
+
 const playerGuessedScore = document.getElementById("player-guessed-score");
 const playerAccuracyEl = document.getElementById("player-accuracy");
 const actualRTScore = document.getElementById("actual-rt-score");
@@ -91,7 +93,24 @@ const logStoredPlayers = function () {
 
 // This function begins when Start Game button on Landing Page is pressed.
 const gameStart = function () {
+  if (addPlayerBtn.value.trim() === ""){
+    playerName = 'Guest';
+    document.createElement("div");
+    playerHUD.innerText = `Player: ${playerName}`
+    console.log(playerName);
+  } else {
+
+  let nameHUD = document.createElement("div");
+    nameHUD.innerHTML;
+  let scoreHUD = document.createElement("div");
+    scoreHUD.innerHTML;
+  let accHUD = document.createElement("div");
+    accHUD.innerHTML;
+
   playerName = addPlayerBtn.value;
+  playerHUD.innerText = `Player: ${playerName}`
+  
+  console.log(playerName);
   if (!players.includes(playerName)) {
     p1 = new Player();
     p1.name = playerName;
@@ -100,9 +119,10 @@ const gameStart = function () {
   } else if (players.includes(playerName)) {p1 = players[players.findIndex(playerName)];
     console.log(p1);    
   }
+}
 
   roundDisplay.value = roundCount*10;
-  let rPg = Math.floor(Math.random()*300);
+  let rPg = Math.floor(Math.random()*301);
 
   // Fetch a random now-playing movie from TMDB API
   const options = {
@@ -115,12 +135,12 @@ const gameStart = function () {
   };
 
   fetch(
-    `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=true&language=en-US&page=${rPg}&sort_by=popularity.desc&with_original_language=en&&release_date.lte=${dayjs().format('MM-DD-YYYY')}&api_key=${API_KEY}`,
+    `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=true&language=en-US&page=${rPg}&sort_by=popularity.desc&with_original_language=en&release_date.lte=${dayjs().format('MM-DD-YYYY')}&api_key=${API_KEY}`,
     options
   )
     .then((response) => response.json())
     .then(function (movie) {
-      // console.log(movie);
+      console.log(movie);
 
       rMI = Math.floor(Math.random() * 20);
       movieTitle = document.createElement("div");
@@ -176,6 +196,15 @@ const gameStart = function () {
 
 const nextRoundFunction = function () {
   playerValueField.value = "";
+  playerGuessedScore.innerText = "";
+  playerGuessedScore.classList.add('tag', 'is-skeleton');
+  playerAccuracyEl.innerText = "";
+  playerAccuracyEl.classList.add('tag', 'is-skeleton');
+  actualRTScore.innerText = "";
+  actualRTScore.classList.add('tag', 'is-skeleton');
+  ptsEarnedEl.innerText = "";
+  ptsEarnedEl.classList.add('tag', 'is-skeleton');
+  guessBtn.disabled = true;
   if (roundCount !== 10) {
     roundCount++;
     let rPg = Math.floor(Math.random()*300);
@@ -190,7 +219,7 @@ const nextRoundFunction = function () {
     };
 
     fetch(
-      `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=true&language=en-US&page=${rPg}&sort_by=popularity.desc&with_original_language=en&&release_date.lte=${dayjs().format('MM-DD-YYYY')}&api_key=${API_KEY}`,
+      `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=true&language=en-US&page=${rPg}&sort_by=popularity.desc&with_original_language=en&release_date.lte=${dayjs().format('MM-DD-YYYY')}&api_key=${API_KEY}`,
       options
     )
       .then((response) => response.json())
@@ -258,11 +287,10 @@ const nextRoundFunction = function () {
       tallyAccuracy = tallyAccuracy + roundAccuracy[i];
     } let sessAvgAcc = tallyAccuracy/roundAccuracy.length;
     console.log(`This session's accuracy avg.: ${sessAvgAcc}`);
-    function checkPName() {
-      return p1.name === playerName;
-    }
-    pi = players.findIndex(checkPName);
-console.log(pi);
+    // function checkPName() {
+    //   return p1.name === playerName;
+    // }
+    // pi = players.findIndex(checkPName);
     p1.accuracy.push(sessAvgAcc);
     sessScore = JSON.parse(localStorage.getItem("score"));
     p1.scores.push(sessScore);
@@ -295,8 +323,14 @@ const restartGame = function () {
   players = JSON.parse(localStorage.getItem("playersData"));
 };
 
+const validateInput = function () {
+  if (Math.round(playerValueField.value) != "" && (Math.round(playerValueField.value) >= 0 && Math.round(playerValueField.value) <= 100)){guessBtn.disabled =false;}
+  else if (Math.round(playerValueField.value) === "") {guessBtn.disabled=true;}
+}
+
 //const checkScore = function(RTscore) {
 const checkScore = function() {
+  if (Math.round(playerValueField.value) != "") {
   fetch(`https://www.omdbapi.com/?apikey=1053f97f&t=${document.getElementById("poppedMovieTitle").textContent}`)
           .then(function(response) {
             console.log(response.json);
@@ -304,9 +338,15 @@ const checkScore = function() {
           })
           .then(function(omdb){
             console.log(omdb);
-            console.log(parseInt(omdb.Ratings[1].Value));
-            let RTscore = parseInt(omdb.Ratings[1].Value);
-            let playerValue = playerValueField.value;
+            let RTscore;
+            if (omdb.Ratings.length === 1) {
+              console.log(typeof omdb.Ratings[0].Value);
+              let nonRTcalcA = omdb.Ratings[0].Value.split('/');
+              let n = parseFloat(nonRTcalcA[0]);
+              let d = parseFloat(nonRTcalcA[1]);
+              RTscore = Math.round((n / d) * 100);
+            } else { RTscore = parseInt(omdb.Ratings[1].Value);}
+            let playerValue = Math.round(playerValueField.value);
             // let accuracy = 1 - (Math.abs(`${RTscore}` - guessedScore))/100;
             let accuracy = 1 - (Math.abs(RTscore - playerValue))/100;
             let accuracyShow = Math.round(accuracy * 100) + "%";
@@ -315,8 +355,11 @@ const checkScore = function() {
             let earnedPoints = Math.round(maxPoints * weightedAccuracy);
           
             roundAccuracy.push(accuracy);
+            playerAccuracyEl.classList.remove('tag', 'is-skeleton');
             playerAccuracyEl.innerText = accuracyShow;
+            playerGuessedScore.classList.remove('tag', 'is-skeleton');
             playerGuessedScore.innerText = playerValue;
+            actualRTScore.classList.remove('tag', 'is-skeleton');
             actualRTScore.innerText = RTscore;
             // actualRTScore.innerText = ${RTscore};
           
@@ -344,6 +387,8 @@ const checkScore = function() {
             return [accuracy, earnedPoints];
           })
           }
+  else if (playerValueField.value = "") {console.log("Please enter a guess.")};
+        }
   
 
 
@@ -352,6 +397,18 @@ const checkScore = function() {
 
 // Event listeners below. The names should be helpful in discerning which is which.
 // addPlayerBtn.addEventListener("click", trackPlayersData);
+playerValueField.addEventListener("input", function() {
+  if (playerValueField.value.length > 3) {playerValueField.value = playerValueField.value.slice(0, 3);
+  }
+  if (playerValueField.value > 100) {playerValueField.value = 100
+  }
+  if (playerValueField.value < 0) {playerValueField.value = 0
+  }
+  validateInput();
+});
+
+playerValueField.addEventListener("keydown", validateInput);
+playerValueField.addEventListener("change", validateInput);
 startBtn.addEventListener("click", gameStart);
 guessBtn.addEventListener("click", checkScore);
 nextRoundBtn.addEventListener("click", nextRoundFunction);
@@ -410,4 +467,5 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
+
 
