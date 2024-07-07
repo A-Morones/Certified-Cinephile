@@ -340,8 +340,9 @@ const restartGame = function () {
 };
 
 const validateInput = function () {
+  console.log("Validate Input fired");
   if (Math.round(playerValueField.value) != "" && (Math.round(playerValueField.value) >= 0 && Math.round(playerValueField.value) <= 100)){guessBtn.disabled =false;}
-  else if (Math.round(playerValueField.value) === "") {guessBtn.disabled=true;}
+  else if (playerValueField.value === "") {guessBtn.disabled=true;}
 }
 
 const checkScore = function() {
@@ -430,7 +431,6 @@ playerValueField.addEventListener("input", function() {
   }
   if (playerValueField.value < 0) {playerValueField.value = 0
   }
-  validateInput();
 });
 
 playerValueField.addEventListener("keydown", validateInput);
