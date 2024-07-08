@@ -131,6 +131,13 @@ p {
   height: 100vh;
 }
 
+#input::placeholder {
+  font-family: "Oswald", serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size:1rem !important;
+}
+
 #movie p {
   color: rgb(255, 255, 255);
 }
@@ -267,8 +274,32 @@ li {
 }
 
 #poster-img {
+  transform-style: preserve-3d;
+  perspective:1000px;
+  perspective-origin:50% 50%;
+  backface-visibility:hidden;
   box-shadow: 15px 15px 20px 5px rgb(0, 0, 0, 40%);
   animation: wobble 2s alternate ease-in-out infinite;
+  --width:12em;
+  width: var(--width);
+  height: calc(var(--width) * 1.5);
+  cursor: pointer;
+}
+
+#poster-img:hover {
+  transform-style: preserve-3d;
+  perspective:1000px;
+  perspective-origin:50% 50%;
+  backface-visibility:hidden;
+  box-shadow: 0px 0px 10px 5px rgb(255, 255, 255),
+  15px 15px 20px 5px rgb(0, 0, 0, 40%);
+  animation: none;
+  cursor: pointer;
+}
+
+#player-HUD {
+  border:solid;
+  border-color:rgb(88, 88, 88);
 }
 
 .modal-card-body div {
@@ -277,19 +308,49 @@ li {
   font-style: normal;
 }
 
+.is-size-4 {
+  font-family: "Oswald", serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size:1.2rem !important;
+}
+
+@media screen and (max-width:1000px) {
+  #poster-img {
+    transform-style: preserve-3d;
+    perspective:1000px;
+    perspective-origin:50% 50%;
+    backface-visibility:hidden;
+    box-shadow: 15px 15px 20px 5px rgb(0, 0, 0, 40%);
+    animation: wobble 2s alternate ease-in-out infinite;
+    --width:12em;
+    width: var(--width);
+    height: calc(var(--width) * 1.5);
+  }
+}
+
+
 @media screen and (max-width:768px) {
 #movie {
   height:80vh;
 }
 #input {
-  height:130px;
+  height:160px;
 
+}
+
+#input::placeholder {
+  font-family: "Oswald", serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size:0.6rem !important;
 }
 
 #col-container {
 height:20vh;
 margin-top:auto;
 }
+
 
 #call-to-action {
   width:120px;
@@ -346,6 +407,27 @@ margin-top:auto;
   font-weight: 400;
   font-style: normal;
   font-size:1rem !important;
+}
+
+.is-size-6 {
+  font-family: "Oswald", serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size:0.6rem !important;
+}
+
+#poster-img {
+  transform-style: preserve-3d;
+  perspective:1000px;
+  perspective-origin:50% 50%;
+  backface-visibility:hidden;
+  box-shadow: 15px 15px 20px 5px rgb(0, 0, 0, 40%);
+  animation: wobble 2s alternate ease-in-out infinite;
+  --width:10.6em;
+  width: var(--width);
+  height: calc(var(--width) * 1.5);
+  cursor: pointer;
+
 }
 
 }
