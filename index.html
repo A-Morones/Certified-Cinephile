@@ -35,52 +35,55 @@
           <div class="logo-bottom">
             <h1 class="logoB">CINEPHILE</h1>
           </div>
-          <h2>Guess the Rotten Tomatoes Score!</h2>
         </div>
       </header>
 
       <div class="container">
         <div class="buttons is-centered mt-5">
-          <button
-            id="show-rules-btn"
-            class="button js-modal-trigger is-primary"
-            data-target="rulesModal"
-          >
-            Game Rules
-          </button>
-          <input style="width:140px;" id="add-player-btn" class="input" placeholder="Who is playing?">
+          <input style="width:140px;" id="add-player-btn" class="input" maxlength="15" placeholder="Who is playing?">
 
           <button id="start-game-btn" class="button is-primary">
             Start Game
           </button>
+          <button
+          id="show-rules-btn"
+          class="button js-modal-trigger is-primary"
+          data-target="rulesModal"
+        >
+          Game Rules
+        </button>
         </div>
       </div>
 
       <!-- The Modal -->
       <div id="rulesModal" class="modal">
+        <div class="modal-background"></div>
         <div class="modal-content">
-          <button class="is-large modal-close"></button>
+
 
           <ul class="has-text-light">
             <li class="has-background-dark">
-              Players will be asked to guess the Rotten Tomatoes score for a
-              series of movies.
+              Certified Cinephile will present 10 randomly selected Movies. </br>Do your best to try and guess the Rotten Tomatoes score.
             </li>
             <li class="has-background-dark">
-              Each player will enter their guesses, and the game will compare
-              the guesses to the actual scores.
+              The closer your guess is to the actual Rotten Tomatoes score the more points you earn! A perfect guess results in the maximum of 20 points being awarded.
             </li>
             <li class="has-background-dark">
-              The player whose guess is closest to the actual score wins the
-              round.
+              A streak of perfect guesses will begin a score multiplier! </br>Scoring at least 100 points will officially declare you a Certified Cinephile!
             </li>
             <li class="has-background-dark">
-              At the end of the game, the player with the most accurate guesses
-              overall is declared the winner.
+              Get creative with your guess! </br>You'd be surprised how much you can tell about a movie by it's poster. </br>Click or tap on the poster to see a little additional information.
+            </li>
+            <li class="has-background-dark">
+              Enter your name to keep track of your Hi-Score and Accuracy!
             </li>
             <li class="has-background-dark">Have fun and good luck!</li>
           </ul>
+
+
+          <button class="is-large modal-close"></button>
         </div>
+
       </div>
     </main>
    
@@ -129,7 +132,7 @@
             <div id="acc-HUD" class="column is-full-tablet is-full-desktop is-size-4"></div>
 
           </div>
-          <input type="number" max="100" min="1" id="player-RT-guess-field" class="input is-rounded is-large column is-one-quarter-mobile is-two-thirds-tablet is-two-thirds-desktop is-offset-one-sixth-tablet is-offset-one-sixth-desktop" placeholder="100"></input>
+          <input type="number" max="100" min="0" id="player-RT-guess-field" class="input is-rounded is-large column is-one-quarter-mobile is-two-thirds-tablet is-two-thirds-desktop is-offset-one-sixth-tablet is-offset-one-sixth-desktop" placeholder="100"></input>
           <button id="guess" disabled class="js-modal-trigger column button is-primary is-outlined is-rounded  is-narrow-mobile is-two-thirds-tablet is-two-thirds-desktop is-offset-one-sixth-tablet is-offset-one-sixth-desktop" data-target="player-input">
             <span class="icon is-large">
               <i class="fa-solid fa-circle-check fa-2xl" style="color: #63E6BE;"></i>
@@ -142,7 +145,7 @@
   </main>
   <main id="results-page" class="page out-left">
     <aside id="results" class="columns mt-6 is-mobile is-multiline is-centered">
-        <h1 id="results-text" class="column is-full mt-2">Let's see how you did ...</h1>
+        <h1 id="results-text" class="column is-size-3 is-full mt-2">Let's see how you did ...</h1>
         <div id="populate-results" class="column is-full"></div>
         <button id="play-again" class="button">Play Again?</button>
   </main>
