@@ -28,6 +28,7 @@ const roundDisplay = document.getElementById("round-display");
 const playAgain = document.getElementById("play-again");
 
 // Initialize game state as Round 1.
+let testMovieTitle;
 let testSuccess;
 let roundCount = 1;
 let roundAccuracy = [];
@@ -93,13 +94,18 @@ const gameStart = function () {
   };
 
   fetch(
-    `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=true&language=en-US&page=${rPg}&sort_by=popularity.desc&with_original_language=en&release_date.lte=${dayjs().format('MM-DD-YYYY')}&without_genres=99&without_keywords=adult&api_key=${API_KEY}`,
+    `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=true&language=en-US&page=${rPg}&sort_by=popularity.desc&with_original_language=en&release_date.lte=${dayjs().format('MM-DD-YYYY')}&without_genres=99&without_keywords=445|2727|5593|6443|7344|15197|18314|18321|155139|158436|176511|187522|193698|199758|237847|238355|289496&api_key=${API_KEY}`,
     options
   )
     .then((response) => response.json())
-    .then(function (movie) {
-    // do {
-      rMI = Math.floor(Math.random() * 20);
+    .then(async function (movie) {
+      do {
+        rMI = Math.floor(Math.random() * 20);
+        testMovieTitle = movie.results[rMI].title;
+        testSuccess = await test2ndAPI(testMovieTitle);}
+      while (!testSuccess);
+      console.log('Successfully retrieved movie data.');
+
       movieTitle = document.createElement("div");
       movieTitle.setAttribute("id", "poppedMovieTitle");
       movieTitle.innerHTML = `${movie.results[rMI].title}`;
@@ -188,11 +194,14 @@ const nextRoundFunction = function () {
       options
     )
       .then((response) => response.json())
-      .then(function (movie) {
 
-        rMI = Math.floor(Math.random() * 20);
-
-
+      .then(async function (movie) {
+        do {
+          rMI = Math.floor(Math.random() * 20);
+          testMovieTitle = movie.results[rMI].title;
+          testSuccess = await test2ndAPI(testMovieTitle);}
+        while (!testSuccess);
+        console.log('Successfully retrieved movie data.');
         
         movieTitle = document.createElement("div");
         movieTitle.setAttribute("id", "poppedMovieTitle");
@@ -346,19 +355,23 @@ const calcAvgAcc = function(accuracy) {
   return avgAcc;
 }
 
-// const test2ndAPI = function() {
-//   fetch(`https://www.omdbapi.com/?apikey=1053f97f&t=${document.getElementById("poppedMovieTitle").textContent}`)
-//   .then(function(response) {
-//     console.log(response.json);
-//     return response.json();
-//   })
-//   .then(function(omdb){
-//       console.log(omdb);
-//   })
-//   if ( || omdb.Ratings.length === 0) {
-//     return testSuccess = true;
-//   }
-// }
+const test2ndAPI = async function(testMovieTitle) {
+  try {
+  const response = await fetch(`https://www.omdbapi.com/?apikey=1053f97f&t=${testMovieTitle}`)
+  const omdb = await response.json();
+
+  if (!response.ok || !omdb.Ratings || omdb.Ratings.length === 0) {
+  testSuccess = false;
+  console.log("Unable to fetch movie with ratings. Retrying.");
+  } else { testSuccess = true;};
+
+  }
+  catch (error) {
+    console.error("Unable to fetch movie with ratings. Retrying.", error);
+    testSuccess = false;
+  }
+  return testSuccess;
+}
 
 const checkScore = function() {
   if (Math.round(playerValueField.value) != "") {
