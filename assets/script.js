@@ -190,7 +190,7 @@ const nextRoundFunction = function () {
     };
 
     fetch(
-      `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=true&language=en-US&page=${rPg}&sort_by=popularity.desc&with_original_language=en&release_date.lte=${dayjs().format('MM-DD-YYYY')}&without_genres=99&without_keywords=adult&api_key=${API_KEY}`,
+      `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=true&language=en-US&page=${rPg}&sort_by=popularity.desc&with_original_language=en&release_date.lte=${dayjs().format('MM-DD-YYYY')}&without_genres=99&without_keywords=445|2727|5593|6443|7344|15197|18314|18321|155139|158436|176511|187522|193698|199758|237847|238355|289496&api_key=${API_KEY}`,
       options
     )
       .then((response) => response.json())
