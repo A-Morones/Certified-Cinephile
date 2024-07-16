@@ -28,6 +28,8 @@ const roundDisplay = document.getElementById("round-display");
 const playAgain = document.getElementById("play-again");
 
 // Initialize game state as Round 1.
+let testMovieTitle;
+let testSuccess;
 let roundCount = 1;
 let roundAccuracy = [];
 let sessScore;
@@ -42,61 +44,15 @@ if (players === null) {
   players = [];
 }
 console.log(players);
-
 function Player(name) {
 
     this.name = name;
     this.scores = [];
     this.accuracy = [];
-    this.calcHiscore = function() {
-      const playerHiScore = Math.max(...this.scores);
-      return playerHiScore;
-    }
-    this.calcAvgAcc = function() {
-      let accTally = 0;
-      for (let i = 0; i<this.accuracy.length; i++) {
-      accTally += this.accuracy[i];
-      }
-      const avgAcc = accTally/accuracy.length;
-      return avgAcc;
-  }
 }
 
 const API_KEY = "3306c7ffcda8121e53d4fb1e95e8750c";
 const TMDB_URL = `https://api.themoviedb.org/3/movie/11?api_key=${API_KEY}&language=en-US&page=1`;
-
-const collectPlayers = function () {
-  //   const players = [];
-  let keepEntering = true;
-
-  while (keepEntering) {
-    const firstNameInput = prompt("Enter your first name");
-    const lastNameInput = prompt("Enter your last name");
-
-    const player = {
-      playerFirstName: firstNameInput,
-      playerLastName: lastNameInput,
-    };
-    players.push(player);
-    keepEntering = confirm("Do you want to add another name");
-  }
-  return players;
-};
-
-const trackPlayersData = function () {
-  const players = collectPlayers();
-  localStorage.setItem("playersData", JSON.stringify(players));
-  console.log("Players data stored in local storage.");
-};
-
-const logStoredPlayers = function () {
-  const storedPlayers = localStorage.getItem("playersData");
-  if (storedPlayers) {
-    console.log("Stored Players:", JSON.parse(storedPlayers));
-  } else {
-    console.log("No players data found in local storage.");
-  }
-};
 
 // This function begins when Start Game button on Landing Page is pressed.
 const gameStart = function () {
@@ -104,29 +60,30 @@ const gameStart = function () {
   playerName = addPlayerBtn.value;
   if (addPlayerBtn.value.trim() === ""){
     playerName = 'Guest';
-    document.createElement("div");
+    let playerIsGuest = true;
     console.log(playerName);
   }
 
-    nameHUD.textContent = `${playerName}`;
-    scoreHUD.textContent = `Score: ${playerScore}`;
-    accHUD.textContent = `Accuracy: %`;
+  nameHUD.textContent = `${playerName}`;
+  scoreHUD.textContent = `Score: ${playerScore}`;
+  accHUD.textContent = `Accuracy: %`;
 
-  
-  console.log(playerName);
-  if (!players.includes(playerName)) {
+
+  if (!players.some(player => player.name === playerName)) {
+    playerIsGuest = false;
     p1 = new Player();
     p1.name = playerName;
     players.push(p1);
     localStorage.setItem("playersData", JSON.stringify(players));
-  } else if (players.includes(playerName)) {p1 = players[players.findIndex(playerName)];
-    console.log(p1);
-  } else if (playerName === 'Guest') {let playerIsGuest = true;};
-
+    console.log("New player data created.");
+  } else if (players.some(function(player) {
+    playerIsGuest = false;
+      return player.name === playerName;})) {p1 = players.find(function(player){return player.name === playerName;});
+    console.log(`Welcome back ${playerName}!`);};
+  
   roundDisplay.value = roundCount*10;
   let rPg = Math.floor(Math.random()*300) + 1;
 
-  // Fetch a random now-playing movie from TMDB API
   const options = {
     method: "GET",
     headers: {
@@ -137,17 +94,22 @@ const gameStart = function () {
   };
 
   fetch(
-    `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=true&language=en-US&page=${rPg}&sort_by=popularity.desc&with_original_language=en&release_date.lte=${dayjs().format('MM-DD-YYYY')}&api_key=${API_KEY}`,
+    `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=true&language=en-US&page=${rPg}&sort_by=popularity.desc&with_original_language=en&release_date.lte=${dayjs().format('MM-DD-YYYY')}&without_genres=99&without_keywords=445|2727|5593|6443|7344|15197|18314|18321|155139|158436|176511|187522|193698|199758|237847|238355|289496&api_key=${API_KEY}`,
     options
   )
     .then((response) => response.json())
-    .then(function (movie) {
-      console.log(movie);
+    .then(async function (movie) {
+      do {
+        rMI = Math.floor(Math.random() * 20);
+        testMovieTitle = movie.results[rMI].title;
+        testSuccess = await test2ndAPI(testMovieTitle);}
+      while (!testSuccess);
+      console.log('Successfully retrieved movie data.');
 
-      rMI = Math.floor(Math.random() * 20);
       movieTitle = document.createElement("div");
       movieTitle.setAttribute("id", "poppedMovieTitle");
       movieTitle.innerHTML = `${movie.results[rMI].title}`;
+      console.log(movie.results[rMI]);
       if (document.getElementById("movie-title").childElementCount !== 0)
         {
           document.getElementById("movie-title").removeChild(document.getElementById("poppedMovieTitle"));
@@ -191,20 +153,17 @@ const gameStart = function () {
           document.getElementById("movie-poster").removeChild(document.getElementById("poppedMoviePoster"));
         }
         document.getElementById("movie-poster").appendChild(moviePoster);
-        // console.log(document.getElementById("movie-poster").getBoundingClientRect());
 
     })
     .catch((err) => console.error(err));
 
   // This is the screen transition script.
-  // It applies CSS classes that effectively slide the current containers off screen to be replaced by the next screen.
+  // CSS classes slide current containers off screen to be replaced by the next screen.
   landingPage.setAttribute("class", "page out");
   setTimeout(gamePage.setAttribute("class", "page load"), 500);
   setTimeout(gamePage.setAttribute("class", "page in-right"), 500);
 };
 
-
-// This function is called when the Submit button on the Gameplay screen is pressed. It will increment the current 'Round' up to 10. After Round 10 the final round it will transition to the Game Results screen, which would be the final screen. WIP.
 
 const nextRoundFunction = function () {
   playerValueField.value = "";
@@ -219,7 +178,7 @@ const nextRoundFunction = function () {
   guessBtn.disabled = true;
   if (roundCount !== 10) {
     roundCount++;
-    let rPg = Math.floor(Math.random()*300);
+    let rPg = Math.floor(Math.random()*300) + 1;
 
     const options = {
       method: "GET",
@@ -231,17 +190,24 @@ const nextRoundFunction = function () {
     };
 
     fetch(
-      `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=true&language=en-US&page=${rPg}&sort_by=popularity.desc&with_original_language=en&release_date.lte=${dayjs().format('MM-DD-YYYY')}&api_key=${API_KEY}`,
+      `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=true&language=en-US&page=${rPg}&sort_by=popularity.desc&with_original_language=en&release_date.lte=${dayjs().format('MM-DD-YYYY')}&without_genres=99&without_keywords=445|2727|5593|6443|7344|15197|18314|18321|155139|158436|176511|187522|193698|199758|237847|238355|289496&api_key=${API_KEY}`,
       options
     )
       .then((response) => response.json())
-      .then(function (movie) {
-        console.log(movie);
-        rMI = Math.floor(Math.random() * 20);
+
+      .then(async function (movie) {
+        do {
+          rMI = Math.floor(Math.random() * 20);
+          testMovieTitle = movie.results[rMI].title;
+          testSuccess = await test2ndAPI(testMovieTitle);}
+        while (!testSuccess);
+        console.log('Successfully retrieved movie data.');
+        
         movieTitle = document.createElement("div");
         movieTitle.setAttribute("id", "poppedMovieTitle");
 
         movieTitle.innerHTML = `${movie.results[rMI].title}`;
+        console.log(movie.results[rMI]);
 
         if (document.getElementById("movie-title").childElementCount !== 0)
         {
@@ -249,8 +215,6 @@ const nextRoundFunction = function () {
         }
         document.getElementById("movie-title").appendChild(movieTitle);
 
-
-        // document.getElementById('movie-title').textContent = movie.title;
 
         moviePoster = document.createElement("div");
         moviePoster.innerHTML = `<img id="poster-img" src="https://image.tmdb.org/t/p/w500${movie.results[rMI].poster_path}" alt="${movie.results
@@ -290,7 +254,6 @@ const nextRoundFunction = function () {
         moviePoster.addEventListener("click", flipsides);
 
 
-        // console.log(document.getElementById("movie-poster").getBoundingClientRect());
 
       })
       .catch((err) => console.error(err));
@@ -307,24 +270,58 @@ const nextRoundFunction = function () {
     resultsPage.setAttribute("class", "page in-left");
 
     console.log(`This session's accuracy avg.: ${sessAvgAcc}`);
-    p1.accuracy.push(sessAvgAcc);
-    p1.scores.push(sessScore);
 
     sessScore = JSON.parse(localStorage.getItem("score"));
     sessAcc = JSON.parse(localStorage.getItem("accuracy"));
+
+    p1.accuracy.push(sessAvgAcc);
+    p1.scores.push(sessScore);
+    console.log(`Player score ${p1.scores}`);
+    console.log(`Player accuracy ${p1.accuracy}`);
+    playerIndex = players.indexOf(p1);
+    players[playerIndex] = p1;
+    localStorage.setItem("playersData", JSON.stringify(players));
+    console.log("Test log of updated player data.");    
+    console.log(JSON.parse(localStorage.getItem("playersData")));
+
     if (sessScore >= 100) {
       sessResults = document.createElement("div");
       sessResults.setAttribute("id", "poppedResults")
       displayResults.appendChild(sessResults);
-      sessResults.innerHTML = `<h1 class="is-size-3">Congratulations!</h1><h1 class="is-size-4">You are indeed a Certified Cinephile!</h1> <h1 class="mb-4 is-size-4">Final Score: ${sessScore}</h1>`;
+      sessResults.innerHTML = `<h1 id="cg" class="is-size-3">Congratulations!</h1><h1 class="is-size-2">You are indeed a Certified Cinephile!</h1> <h1 class="mb-4 is-size-4">Final Score: ${sessScore}</h1>`;
     } else {
       sessResults = document.createElement("div");
       sessResults.setAttribute("id", "poppedResults")
       displayResults.appendChild(sessResults);
       sessResults.innerHTML = `<h1 class="mb-4 is-size-4">You scored ${sessScore} ! Try again!</h1>`;
     }
+
+    let hiScore = calcHiscore(p1.scores);
+    let avgAcc = calcAvgAcc(p1.accuracy);
+    playerStats = document.createElement("div");
+    playerStats.setAttribute("class", "card column is-half is-half-mobile is-offset-one-quarter is-offset-one-quarter-mobile");
+    pScH = document.createElement("header");
+    pScH.setAttribute("class", "card-header");
+    pScHtitle = document.createElement("p");
+    pScHtitle.setAttribute("class", "card-header-title");
+    pScHtitle.innerText = `${p1.name}'s stats:`;
+    pScContent = document.createElement("div");
+    pScContent.setAttribute("class", "card-content");
+    contentText = document.createElement("div");
+    contentText.setAttribute("class", "content");
+    contentText.innerText = `Average Accuracy: ${Math.round(avgAcc*100)}%
+    Hi-Score: ${hiScore}`;
+if (p1.name != "Guest") {
+    displayResults.appendChild(playerStats);
+    playerStats.appendChild(pScH);
+    pScH.appendChild(pScHtitle);
+    pScContent.appendChild(contentText);
+    playerStats.appendChild(pScContent);
   }
-};
+  }
+}
+
+// while testSuccess;
 
 const restartGame = function () {
   roundCount = 1;
@@ -336,13 +333,44 @@ const restartGame = function () {
   landingPage.setAttribute("class", "page load");
   landingPage.setAttribute("class", "page in-left");
   displayResults.removeChild(sessResults);
+  displayResults.removeChild(playerStats);
   players = JSON.parse(localStorage.getItem("playersData"));
 };
 
 const validateInput = function () {
-  console.log("Validate Input fired");
-  if (Math.round(playerValueField.value) != "" && (Math.round(playerValueField.value) >= 0 && Math.round(playerValueField.value) <= 100)){guessBtn.disabled =false;}
+  if (Math.round(playerValueField.value) != "" && (Math.round(playerValueField.value) >= 0 && Math.round(playerValueField.value) <= 100)){guessBtn.disabled = false;}
   else if (playerValueField.value === "") {guessBtn.disabled=true;}
+}
+
+const calcHiscore = function(scores) {
+  let hiScore = Math.max(...scores);
+  return hiScore;
+}
+const calcAvgAcc = function(accuracy) {
+  let accTally = 0;
+  for (let i = 0; i<accuracy.length; i++) {
+  accTally += accuracy[i];
+  }
+  let avgAcc = accTally/accuracy.length;
+  return avgAcc;
+}
+
+const test2ndAPI = async function(testMovieTitle) {
+  try {
+  const response = await fetch(`https://www.omdbapi.com/?apikey=1053f97f&t=${testMovieTitle}`)
+  const omdb = await response.json();
+
+  if (!response.ok || !omdb.Ratings || omdb.Ratings.length === 0) {
+  testSuccess = false;
+  console.log("Unable to fetch movie with ratings. Retrying.");
+  } else { testSuccess = true;};
+
+  }
+  catch (error) {
+    console.error("Unable to fetch movie with ratings. Retrying.", error);
+    testSuccess = false;
+  }
+  return testSuccess;
 }
 
 const checkScore = function() {
@@ -376,7 +404,6 @@ const checkScore = function() {
             playerGuessedScore.innerText = playerValue;
             actualRTScore.classList.remove('tag', 'is-skeleton');
             actualRTScore.innerText = RTscore;
-            // actualRTScore.innerText = ${RTscore};
           
             
             if (accuracy === 1 && prevGuessPerfect === true) {
@@ -392,7 +419,7 @@ const checkScore = function() {
               ptsEarnedEl.setAttribute("class", "is-size-3 has-text-primary has-text-bold column is-half mt-0 pt-0 has-text-centered")
             }
           
-            earnedPoints = earnedPoints * streak;
+            earnedPoints = earnedPoints * streak * streak;
             playerScore += earnedPoints;
             console.log(playerScore);
             ptsEarnedEl.innerText = earnedPoints;
@@ -423,7 +450,6 @@ const checkScore = function() {
 
 
 // Event listeners below. The names should be helpful in discerning which is which.
-// addPlayerBtn.addEventListener("click", trackPlayersData);
 playerValueField.addEventListener("input", function() {
   if (playerValueField.value.length > 3) {playerValueField.value = playerValueField.value.slice(0, 3);
   }
@@ -434,6 +460,7 @@ playerValueField.addEventListener("input", function() {
 });
 
 playerValueField.addEventListener("keydown", validateInput);
+playerValueField.addEventListener("keyup", validateInput);
 playerValueField.addEventListener("change", validateInput);
 startBtn.addEventListener("click", gameStart);
 guessBtn.addEventListener("click", checkScore);
